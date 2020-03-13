@@ -3,11 +3,12 @@
 #               Carter Ray
 #               Timothy Oliver
 # 
-# Project Summary: we make cool things yo
+# Project Summary: We make cool things yo
 ########################################################################
 
-from tkinter import *
+from Tkinter import *
 
 ######################
 ######## Main ########
 ######################
+print "Hello World!"
