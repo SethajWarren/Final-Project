@@ -8,9 +8,13 @@
 
 from Tkinter import *
 
+def test():
+    print "This is the main function."
+    
 ######################
 ######## Main ########
 ######################
+print "Hello World!"
 
 
 for i in range(5):
