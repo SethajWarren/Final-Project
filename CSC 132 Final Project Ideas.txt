@@ -1,8 +1,10 @@
 CSC 132 Final Project Ideas:
 
-1)
+1) A Game
+    - Text based game, where the user uses a GUI instead of typing 
+    - Any other game ideas can go here
 
-2)
+2) A program that uses a USB stick plugged into a machine to read and wrtie to files
 
 3)
 
