@@ -3,12 +3,27 @@ CSC 132 Final Project Ideas:
 1) A Game
     - Text based game, where the user uses a GUI instead of typing 
     - Any other game ideas can go here
+	~ example 1: Game of Life (board game) with a digital representation of players' money, family, etc. and/or the current state of the board (small board)
+			> would include addition such as option for player's to avoid making required payments or to make choices on tiles that 
+			> could come back and land them in an added jail
+	~ example 2: Mancala with recommended move button in GUI 
+			> could add a new feature to the game and a indication of best times to use it
+			> could show the board (programming Mancala is something that is easy to find, so additions are kind of necessary)
+	~ example 3: A trivia game that gathers time for completion (and/or gets a score) and sends an email to someone the user inputs to try the quiz too
+			> might need more questions than what one run-through might actually ask a player 
+			>  (25 total question, 4-8 questions per quiz, randomly use questions)
+			> could use audio files of someone reading the questions
 
-2) A program that uses a USB stick plugged into a machine to read and wrtie to files
+2) A program that uses a USB stick plugged into a machine to read and write to files
 
-3)
+3) A security program operating via password generation or encrypting certain files (using the more secure 'secrets' python class, maybe)
+	- might be something to add to another idea like encrypting files that come from #2
 
-4)
+4) A program that either takes in recorded audio or just plays recorded audio when user prompts it
+	- (someone else is doing "Do You Want to be a Millionaire", but this made me think of the help call)
+	-  could play back audio based on user's input (likely text based or a button press)
+	- could just mix the sounds up
+	
 
 5)
 
