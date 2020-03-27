@@ -33,6 +33,8 @@ CSC 132 Final Project Ideas:
 Preferred ideas (pending): 
 *  implementation of the game Mancala with a recommended button for the user, and multiple CPU opponent difficulties 
 	(possible added feaure to the game which the recommended button would tell user best time to use; possible representation of board in GUI)
+	- Some ideas that can modify the game
+		> 
 
 *  Trivia game that gets user's time spent on questions/entire quiz and gets a score (might use audio to read the questions or other utilization);
 	should also send an email to a user inputted gmail to share their score
@@ -40,8 +42,16 @@ Preferred ideas (pending):
 *  implementation of War card game 
 	- unsure about modifications, but a few possible things:
 		> choice for user to play or bet (and likely choose a side)
+		> idea stemming from the one above ^: allowing the player to bet a currency before each encounter from either 0 to X number of coins.
+			~ If the player wins, they recieve a net positive amount of currency, likewise if they lose they recieve a net negative amount of currency.
+			~ The 'coins' or 'gold' the player bet before battles can be used to either buy cards, buffs, or other advantages to help them win the game.
 		> playing/betting can last for individual 'battles' or the entire 'War' (one round or whole game)
 		> provide ability for user to view which cards in the deck have been played after the round has passed
+			~ Kinda like the post-game stats you see after online games
 		> possible modifications to the deck (based on user's choice) to make chances of winning higher/lower
+			~ We can also implement the difficulty idea from mancala here by allowing the CPU to choose cards as well and the harder difficulties choose better cards.
+		> We can set up a "map" for the player to use and conquer by playing 'battles' and gaining territory. Perhaps the player needs to
+		  capture the enemy's castle to win the 'War' (We can also use this to add more GUI elements into the game.)
+		
 
 

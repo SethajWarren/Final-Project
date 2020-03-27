@@ -9,6 +9,7 @@
 
 from tkinter import *
 import time
+import pygame
 
 ######################
 ######## Main ########
