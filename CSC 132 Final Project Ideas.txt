@@ -15,6 +15,7 @@ CSC 132 Final Project Ideas:
 			> could use audio files of someone reading the questions
 
 2) A program that uses a USB stick plugged into a machine to read and write to files
+	- maybe allow user to upload a picture of themself
 
 3) A security program operating via password generation or encrypting certain files (using the more secure 'secrets' python class, maybe)
 	- might be something to add to another idea like encrypting files that come from #2
@@ -24,8 +25,23 @@ CSC 132 Final Project Ideas:
 	-  could play back audio based on user's input (likely text based or a button press)
 	- could just mix the sounds up
 	
+5) version of War (card game) utilizing stacks
+	- could use a betting system for "battles" and entire "War"
+	- could make modifications to the deck to where probablilities are uneven (6 kings, 2 "7's")
+	- could provide the ability for user to view which cards have been 'deployed' (are no longer in the deck)
 
-5)
+Preferred ideas (pending): 
+*  implementation of the game Mancala with a recommended button for the user, and multiple CPU opponent difficulties 
+	(possible added feaure to the game which the recommended button would tell user best time to use; possible representation of board in GUI)
 
-Preferred idea: 
+*  Trivia game that gets user's time spent on questions/entire quiz and gets a score (might use audio to read the questions or other utilization);
+	should also send an email to a user inputted gmail to share their score
+
+*  implementation of War card game 
+	- unsure about modifications, but a few possible things:
+		> choice for user to play or bet (and likely choose a side)
+		> playing/betting can last for individual 'battles' or the entire 'War' (one round or whole game)
+		> provide ability for user to view which cards in the deck have been played after the round has passed
+		> possible modifications to the deck (based on user's choice) to make chances of winning higher/lower
+
 
