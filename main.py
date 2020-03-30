@@ -11,9 +11,6 @@ from Tkinter import *
 import time
 from random import randint
 
-=======
-import pygame
-
 
 ######################
 ######## Main ########
