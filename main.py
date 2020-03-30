@@ -9,8 +9,12 @@
 
 from Tkinter import *
 import time
+<<<<<<< HEAD
 from random import randint
 
+=======
+import pygame
+>>>>>>> master
 
 ######################
 ######## Main ########
