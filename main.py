@@ -44,13 +44,11 @@ class Battle(Canvas):
     def shuffle(self):
         #starts the game by shuffling and distributing cards
         deck = [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, "J", "J", "J", "J", "Q", "Q", "Q", "Q", "K", "K", "K", "K", "A", "A", "A", "A"]
-        print len(deck)
         rank = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
         suits = ["spades", "clubs", "diamonds", "hearts"]
         mydeck = []
         otherdeck = []
         for i in range(26):
-            print len(deck)
             x = randint(0, len(deck)-1)
             mydeck.append(deck[x])
             del deck[x]
@@ -73,5 +71,4 @@ window = Tk()
 window.geometry("{}x{}".format(WIDTH, HEIGHT))
 window.title("War")
 g = Battle(window)
-g.shuffle()
 window.mainloop()
