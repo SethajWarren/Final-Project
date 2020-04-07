@@ -22,7 +22,6 @@ from random import randint
 # this will make the interactions with cards a lot cleaner
 # and easier to debug.
 class Card(object):
-    # a constructor that takes in suit, value, and image as instance variables
     def __init__(self, suit, rank, image):
         self.suit = suit
         self.rank = rank
@@ -39,6 +38,7 @@ class Card(object):
     @property
     def rank(self):
         return self._rank
+    
 
     @rank.setter
     def rank(self, value):
@@ -52,31 +52,26 @@ class Card(object):
     def image(self, value):
         self._image = value
 
-    # a battle function that take in itself and an opposing card and compares to determine the winner
-    def battle(self, opponent):
-
-        if (self.rank < opponent.rank):
-            winner = opponent
-            loser = self
-            return winner, loser
-
-        elif (self.rank > opponent.rank):
-            winner = self
-            loser = opponent
-            return winner, loser
-
-        # in the case of a tie we just start another battle, however we need to find a way
-        # to return the cards from both encounters, that however depends on how we initiate the battle
-        elif (self.rank == opponent.rank):
-            pass
-        
+    #returns the name jack, queen, king, and ace instead of 11, 12, 13, and 14
+    def getRank(self):
+        value = self.rank
+        if (self.rank == 11):
+            value = "Jack"
+        if (self.rank == 12):
+            value = "Queen"
+        if (self.rank == 13):
+            value = "King"
+        if (self.rank == 14):
+            value = "Ace"
+        return value
+    
     def __str__(self):
-        s = "{} of {}".format(self.rank,self.suit)
+        rankA = self.rank
+        s = "{} of {}".format(self.getRank(), self.suit)
         return s
-
+    
 
 class Battle(Canvas):
-    val = {"s2": "2", "c2":"2", "d2":2, "h2":2, "s3":3, "c3":3, "d3":3, "h3":3, "s4":4, "c4":4, "d4":4, "h4":4, "s5":5, "c5":5, "d5":5, "h5":5, "s6":6, "c6":6, "d6":6, "h6":6, "s7":7, "c7":7, "d7":7, "h7":7, "s8":8, "c8":8, "d8":8, "h8":8, "s9":9, "c9":9, "d9":9, "h9":9, "s10":10, "c10":10, "d10":10, "h10":10, "sJ":11, "cJ":11, "dJ":11, "hJ":11, "sQ":12, "cQ":12, "dQ":12, "hQ":12, "sK":13, "cK":13, "dK":13, "hK":13, "sA":14, "cA":14, "dA":14, "hA":14}
     def __init__(self, master):
         Canvas.__init__(self, master, bg = "olivedrab")
         self.pack(fill = BOTH, expand = 1)
@@ -101,47 +96,131 @@ class Battle(Canvas):
         #bet from your pool of money, calculates the money you get after each hand
         pass
 
-    def shuffle(self):
+    # a battle function that take in itself and an opposing card and compares to determine the winner
+    def battle(self):    
+        myCard = Battle.me[0]
+        oppCard = Battle.opponent[0]
+        
+        #gives the winner the 2 cards and puts them at the bottom of his deck,
+        ###### this needs to be changed to have a second list of cards for each player, that when he runs out of cards his list of cards he got from winning is shuffled
+        if (myCard.rank < oppCard.rank):
+            winner = "opponent"
+            loser = "me"
+            Battle.opponent.append(myCard)
+            Battle.opponent.append(oppCard)
+
+        elif (myCard.rank > oppCard.rank):
+            winner = "me"
+            loser = "opponent"
+            Battle.me.append(myCard)
+            Battle.me.append(oppCard)
+
+        # in the case of a tie we just start another battle, however we need to find a way
+        # to return the cards from both encounters, that however depends on how we initiate the battle
+        elif (myCard.rank == oppCard.rank):
+            my3 = []
+            other3 = []
+            for i in range(3):
+                winner = "tie"
+                #tie stuff to be implemented sometime later
+                pass
+
+        print "My Card: {}".format(Battle.me[0])
+        print "His Card: {}".format(Battle.opponent[0])
+
+        
+        del Battle.me[0]
+        del Battle.opponent[0]
+        print winner + "\n"
+                                
+    def createCards(self):
+        s2 = Card("Spades", 2, "s2.png")
+        c2 = Card("Clubs", 2, "c2.png")
+        d2 = Card("Diamonds", 2,"d2.png")
+        h2 = Card("Hearts", 2, "h2.png")
+        s3 = Card("Spades", 3, "s3.png")
+        c3 = Card("Clubs", 3, "c3.png")
+        d3 = Card("Diamonds", 3,"d3.png")
+        h3 = Card("Hearts", 3, "h3.png")
+        s4 = Card("Spades", 4, "s4.png")
+        c4 = Card("Clubs", 4, "c4.png")
+        d4 = Card("Diamonds", 4,"d4.png")
+        h4 = Card("Hearts", 4, "h4.png")
+        s5 = Card("Spades", 5, "s5.png")
+        c5 = Card("Clubs", 5, "c5.png")
+        d5 = Card("Diamonds", 5,"d5.png")
+        h5 = Card("Hearts", 5, "h5.png")
+        s6 = Card("Spades", 6, "s6.png")
+        c6 = Card("Clubs", 6, "c6.png")
+        d6 = Card("Diamonds", 6,"d6.png")
+        h6 = Card("Hearts", 6, "h6.png")
+        s7 = Card("Spades", 7, "s2.png")
+        c7 = Card("Clubs", 7, "c7.png")
+        d7 = Card("Diamonds", 7,"d7.png")
+        h7 = Card("Hearts", 7, "h7.png")
+        s8 = Card("Spades", 8, "s8.png")
+        c8 = Card("Clubs", 8, "c8.png")
+        d8 = Card("Diamonds", 8,"d8.png")
+        h8 = Card("Hearts", 8, "h8.png")
+        s9 = Card("Spades", 9, "s9.png")
+        c9 = Card("Clubs", 9, "c9.png")
+        d9 = Card("Diamonds", 9,"d9.png")
+        h9 = Card("Hearts", 9, "h9.png")
+        s10 = Card("Spades", 10, "s10.png")
+        c10 = Card("Clubs", 10, "c10.png")
+        d10 = Card("Diamonds", 10,"d10.png")
+        h10 = Card("Hearts", 10, "h10.png")
+        sJ = Card("Spades", 11, "sJ.png")
+        cJ = Card("Clubs", 11, "cJ.png")
+        dJ = Card("Diamonds", 11,"dJ.png")
+        hJ = Card("Hearts", 11, "hJ.png")
+        sQ = Card("Spades", 12, "sQ.png")
+        cQ = Card("Clubs", 12, "cQ.png")
+        dQ = Card("Diamonds", 12,"dQ.png")
+        hQ = Card("Hearts", 12, "hQ.png")
+        sK = Card("Spades", 13, "sK.png")
+        cK = Card("Clubs", 13, "cK.png")
+        dK = Card("Diamonds", 13,"dK.png")
+        hK = Card("Hearts", 13, "hK.png")
+        sA = Card("Spades", 14, "sA.png")
+        cA = Card("Clubs", 14, "cA.png")
+        dA = Card("Diamonds", 14,"dA.png")
+        hA = Card("Hearts", 14, "hA.png")
+        
+        deck = [s2, c2, d2, h2, s3, c3, d3, h3, s4, c4, d4, h4, s5, c5, d5, h5, s6, c6, d6, h6, s7, c7, d7, h7, s8, c8, d8, h8, s9, c9, d9, h9, s10, c10, d10, h10, sJ, cJ, dJ, hJ, sQ, cQ, dQ, hQ, sK, cK, dK, hK, sA, cA, dA, hA]
+        Battle.me, Battle.opponent = self.shuffleStart(deck)
+
+
+    def setImage(self):
+        #sets the images of the cards on screen for the player to see
+        pass
+    
+    def shuffleStart(self, deck):
         #starts the game by shuffling and distributing cards
-        deck = ["s2", "c2", "d2", "h2", "s3", "c3", "d3", "h3", "s4", "c4", "d4", "h4", "s5", "c5", "d5", "h5", "s6", "c6", "d6", "h6", "s7", "c7", "d7", "h7", "s8", "c8", "d8", "h8", "s9", "c9", "d9", "h9", "s10", "c10", "d10", "h10", "sJ", "cJ", "dJ", "hJ", "sQ", "cQ", "dQ", "hQ", "sK", "cK", "dK", "hK", "sA", "cA", "dA", "hA"]
         mydeck = []
-        otherdeck = []
+        oppdeck = []
         for i in range(26):
             x = randint(0, len(deck)-1)
             mydeck.append(deck[x])
             del deck[x]
             y = randint(0, len(deck)-1)
-            otherdeck.append(deck[y])
+            oppdeck.append(deck[y])
             del deck[y]
+            
+        print deck
+        return mydeck, oppdeck
 
-        #this is just an example on how to call all of the values that we have for cards
-        for i in range(len(mydeck)):
-            print mydeck[i],
-            print Battle.val[mydeck[i]],
-            image1 = mydeck[i]+".png"
-            print image1,
-            print "\t",
-            print otherdeck[i],
-            print Battle.val[otherdeck[i]],
-            image2 = otherdeck[i]+".png"
-            print image2
+    def play(self):
+        self.createCards()
+        self.setImage()
 
-        
-        return mydeck, otherdeck
-
-    def play():
-        mydeck, otherdeck = shuffle()
+        #right now this just battles 10 times so you can see what's going on.
+        for i in range(10):
+            self.battle()        
         #runs the game
         pass
     
 
-# testing the card objects
-c1 = Card("Spades", 1, "s1.png")
-c2 = Card("Hearts", 4, "h4.png")
-
-winner, loser = c1.battle(c2)
-
-print winner
 
 #########################################################
 
@@ -151,7 +230,7 @@ window = Tk()
 window.geometry("{}x{}".format(WIDTH, HEIGHT))
 window.title("War")
 g = Battle(window)
-g.shuffle()
+g.play()
 window.mainloop()
 
 
@@ -169,6 +248,12 @@ window.mainloop()
 #       cause it would make our lives a lot easier.
 
 
+# Carter: I used Seth's card class and made it initialize all the cards and put them into a big list called deck, from there we can shuffle like we did before.
+#         The cards are now able to be called everywhere because of the varibles Card.me and Card.opponent.
+#         Card.me and Card.opponent contain a list of all of the card object in their respective decks.
+#         Their decks are created by shuffling the main deck.
+#         Things that need to be done: tie system that gets 3 cards from each opponent (but doesnt tell anyone which cards they are). Whoever wins on their 4th cards gets the whole pot
+#         The GUI still needs to be done.
 
 
 
