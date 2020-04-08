@@ -39,7 +39,6 @@ class Card(object):
     def rank(self):
         return self._rank
     
-
     @rank.setter
     def rank(self, value):
         self._rank = value
@@ -52,8 +51,7 @@ class Card(object):
     def image(self, value):
         self._image = value
 
-    #returns the name jack, queen, king, and ace instead of 11, 12, 13, and 14
-    def getRank(self):
+    def __str__(self):
         value = self.rank
         if (self.rank == 11):
             value = "Jack"
@@ -63,11 +61,7 @@ class Card(object):
             value = "King"
         if (self.rank == 14):
             value = "Ace"
-        return value
-    
-    def __str__(self):
-        rankA = self.rank
-        s = "{} of {}".format(self.getRank(), self.suit)
+        s = "{} of {}".format(value, self.suit)
         return s
     
 
@@ -96,42 +90,103 @@ class Battle(Canvas):
         #bet from your pool of money, calculates the money you get after each hand
         pass
 
+    def shuffle(self, Odeck, deck):
+        deck_ = []
+        while (len(Odeck) > 0):
+            deck_.append(Odeck[0])
+            del Odeck[0]
+        while (len(deck) > 0):
+            x = randint(0, len(deck)-1)
+            deck_.append(deck[x])
+            del deck[x]
+        if (len(deck_) == 0):
+            self.endGame()
+            
+        return deck_
+
+    def endGame(self):
+        Battle.going = False
+        Winner = ""
+        if (len(Battle.me) > len(Battle.opponent)):
+            Winner = "me"
+        if (len(Battle.me) < len(Battle.opponent)):
+            Winner = "opponent"
+        print Winner
+        print Battle.i
+        print len(Battle.me) + len(Battle.meQ)
+        print len(Battle.opponent) + len(Battle.oppQ)
+        
     # a battle function that take in itself and an opposing card and compares to determine the winner
-    def battle(self):    
+    def battle(self):
         myCard = Battle.me[0]
         oppCard = Battle.opponent[0]
+        del Battle.me[0]
+        del Battle.opponent[0]
         
-        #gives the winner the 2 cards and puts them at the bottom of his deck,
-        ###### this needs to be changed to have a second list of cards for each player, that when he runs out of cards his list of cards he got from winning is shuffled
         if (myCard.rank < oppCard.rank):
             winner = "opponent"
-            loser = "me"
-            Battle.opponent.append(myCard)
-            Battle.opponent.append(oppCard)
+            Battle.oppQ.append(myCard)
+            Battle.oppQ.append(oppCard)
 
         elif (myCard.rank > oppCard.rank):
             winner = "me"
-            loser = "opponent"
-            Battle.me.append(myCard)
-            Battle.me.append(oppCard)
-
-        # in the case of a tie we just start another battle, however we need to find a way
-        # to return the cards from both encounters, that however depends on how we initiate the battle
-        elif (myCard.rank == oppCard.rank):
-            my3 = []
-            other3 = []
-            for i in range(3):
-                winner = "tie"
-                #tie stuff to be implemented sometime later
-                pass
-
-        print "My Card: {}".format(Battle.me[0])
-        print "His Card: {}".format(Battle.opponent[0])
-
+            Battle.meQ.append(myCard)
+            Battle.meQ.append(oppCard)
         
-        del Battle.me[0]
-        del Battle.opponent[0]
-        print winner + "\n"
+        elif (myCard.rank == oppCard.rank):
+            megabattle = [myCard, oppCard]
+            while (True):
+                #adds the queue to the players decks if  they dont have enough to mega battle
+                if (len(Battle.me) < 4):
+                    Battle.me = self.shuffle(Battle.me, Battle.meQ)
+                if (len(Battle.opponent) < 4):
+                    Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+
+                #if they still dont have enough, they battle with however many they have
+                if (len(Battle.me) < 4 and len(Battle.me) > 0):
+                    for i in range(len(Battle.me) - 2):
+                        megabattle.append(Battle.me[0])
+                        del Battle.me[0]
+                else:
+                    for i in range(3):
+                        megabattle.append(Battle.me[0])
+                        del Battle.me[0]
+ 
+                if (len(Battle.opponent) < 4 and len(Battle.opponent) > 0):
+                    for i in range(len(Battle.opponent) - 2):
+                        megabattle.append(Battle.opponent[0])
+                        del Battle.opponent[0]
+                else:
+                    for i in range(3):
+                        megabattle.append(Battle.opponent[0])
+                        del Battle.opponent[0]
+
+                print len(Battle.me)
+                print len(Battle.opponent)
+                
+                if (len(Battle.me) > 0):
+                    myCard = Battle.me[0]
+                    del Battle.me[0]
+                    megabattle.append(myCard)
+                    
+                if (len(Battle.opponent) > 0):
+                    oppCard = Battle.opponent[0]
+                    del Battle.opponent[0]
+                    megabattle.append(oppCard)
+                
+                
+                if (myCard.rank < oppCard.rank):
+                    winner = "opponent"
+                    for item in megabattle:
+                        Battle.oppQ.append(item)
+                    break
+
+                elif (myCard.rank > oppCard.rank):
+                    winner = "me"
+                    for item in megabattle:
+                        Battle.meQ.append(item)
+                    break
+                
                                 
     def createCards(self):
         s2 = Card("Spades", 2, "s2.png")
@@ -190,6 +245,11 @@ class Battle(Canvas):
         deck = [s2, c2, d2, h2, s3, c3, d3, h3, s4, c4, d4, h4, s5, c5, d5, h5, s6, c6, d6, h6, s7, c7, d7, h7, s8, c8, d8, h8, s9, c9, d9, h9, s10, c10, d10, h10, sJ, cJ, dJ, hJ, sQ, cQ, dQ, hQ, sK, cK, dK, hK, sA, cA, dA, hA]
         Battle.me, Battle.opponent = self.shuffleStart(deck)
 
+        Battle.meQ = []
+        Battle.oppQ = []
+
+        Battle.going = True        
+
 
     def setImage(self):
         #sets the images of the cards on screen for the player to see
@@ -207,18 +267,32 @@ class Battle(Canvas):
             oppdeck.append(deck[y])
             del deck[y]
             
-        print deck
         return mydeck, oppdeck
 
     def play(self):
+        Battle.i = 0
         self.createCards()
         self.setImage()
 
         #right now this just battles 10 times so you can see what's going on.
-        for i in range(10):
-            self.battle()        
+        while (True):
+            Battle.i += 1
+            self.battle()
+            if(len(Battle.me) == 0):
+                if (len(Battle.meQ) == 0):
+                    self.endGame()
+                    break
+                else:
+                    Battle.me = self.shuffle(Battle.me, Battle.meQ)
+                    
+            if(len(Battle.opponent) == 0):
+                if (len(Battle.oppQ) == 0):
+                    self.endGame()
+                    break
+                else:
+                    Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+            
         #runs the game
-        pass
     
 
 
@@ -254,6 +328,14 @@ window.mainloop()
 #         Their decks are created by shuffling the main deck.
 #         Things that need to be done: tie system that gets 3 cards from each opponent (but doesnt tell anyone which cards they are). Whoever wins on their 4th cards gets the whole pot
 #         The GUI still needs to be done.
+
+
+# Carter: Handles ties, and how you win.,
+#         if the player runs out of cards, etc.
+#         added some random variables that are tracking the number of games played, those will be removed later
+#         NEEDS: user input to move on, gui, etc.
+#         This is just the base game logic working. if you see any issues (probably are some) let me know
+
 
 
 
