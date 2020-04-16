@@ -39,7 +39,6 @@ class Card(object):
     def rank(self):
         return self._rank
     
-
     @rank.setter
     def rank(self, value):
         self._rank = value
@@ -71,14 +70,49 @@ class Card(object):
         return s
     
 
-class Battle(Canvas):
+class Battle(Frame):
     def __init__(self, master):
-        Canvas.__init__(self, master, bg = "olivedrab")
-        self.pack(fill = BOTH, expand = 1)
-
+        Frame.__init__(self, master)
+        
     def mainScreen(self):
         #main screen: options to play, go to store, equip modifiers: (eg. table backgrounds, deck colors)
-        pass
+
+        # main set up for game
+        Battle.money = 0
+
+        Battle.currentBet = 0
+        
+        # The opponent deck and card
+
+        superBetUp = Button(self.master, bg = Battle.bg, text="superBetUp.gif", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        superBetUp.grid(row=0, column=0, sticky=N+S+E+W)
+        
+        betUp = Button(self.master, bg = Battle.bg, text="betUp.gif", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        betUp.grid(row=1, column=0, sticky=N+S+E+W)
+        
+        currentBet = Label(self.master, bg = Battle.bg, text=str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        currentBet.grid(row=2, column=0, sticky=N+S+E+W)
+        
+        betDown = Button(self.master, bg = Battle.bg, text="betDown.gif", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        betDown.grid(row=3, column=0, sticky=N+S+E+W)
+        
+        superBetDown = Button(self.master, bg = Battle.bg, text="superBetDown.gif", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        superBetDown.grid(row=4, column=0, sticky=N+S+E+W)
+
+        totalMoney = Label(self.master, bg = Battle.bg, text=str(Battle.money), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        totalMoney.grid(row=5, column=0, sticky=N+S+E+W)
+        
+        oppCard = Label(self.master, bg = Battle.bg, text="Battle.opponentCard.Image", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppCard.grid(row=0, column=2, rowspan=3, sticky=N+S+E+W)
+        
+        oppDeck = Label(self.master, bg = Battle.bg, text="Battle.back", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppDeck.grid(row=0, column=3, rowspan=3, sticky=N+S+E+W)
+
+        playerCard = Label(self.master, bg = Battle.bg, text="Battle.playerCard.image", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerCard.grid(row=3, column=2, rowspan=3, sticky=N+S+E+W)
+        
+        playerDeck = Button(self.master, bg = Battle.bg, text="Battle.back", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerDeck.grid(row=3, column=3, rowspan=3, sticky=N+S+E+W)
     
     def store(self):
         #option to purchase in-game items, decks, backgrounds
@@ -86,7 +120,8 @@ class Battle(Canvas):
 
     def options(self):
         #settings screen, equip modifiers
-        pass
+        Battle.bg = "darkolivegreen"
+        Battle.back = "back.gif"
 
     def save(self):
         #save money and high scores, stuff unlocked, etc
@@ -101,7 +136,7 @@ class Battle(Canvas):
         myCard = Battle.me[0]
         oppCard = Battle.opponent[0]
         
-        #gives the winner the 2 cards and puts them at the bottom of his deck,
+        # gives the winner the 2 cards and puts them at the bottom of his deck,
         ###### this needs to be changed to have a second list of cards for each player, that when he runs out of cards his list of cards he got from winning is shuffled
         if (myCard.rank < oppCard.rank):
             winner = "opponent"
@@ -230,7 +265,8 @@ window = Tk()
 window.geometry("{}x{}".format(WIDTH, HEIGHT))
 window.title("War")
 g = Battle(window)
-g.play()
+g.options()
+g.mainScreen()
 window.mainloop()
 
 
@@ -254,6 +290,17 @@ window.mainloop()
 #         Their decks are created by shuffling the main deck.
 #         Things that need to be done: tie system that gets 3 cards from each opponent (but doesnt tell anyone which cards they are). Whoever wins on their 4th cards gets the whole pot
 #         The GUI still needs to be done.
+
+# Seth: I modeled the GUI but it is nowhere close to being done. The background for all the GUI components so far are set to a variable in the game class, this will allow us to easily
+#       change the background for the entire GUI when we impliment cosmetics. As you can see the GUI does not use any pictures yet but instead displays the text that will be used to
+#       refer to each image. For some reason the back.gif file was not working so I did the same for that too. I put all the pictures in a file named Pictures, so we will need to research
+#       how to acess that file for pictures in python but I think we can do it. Lastly, I converted all the images we need into .gif format to work. I dont know why I didn't do that to
+#       begin with but it's done.
+#
+#       As for the next steps would be to fully flesh out the backend of the game. This will make the GUI much easier to program as we would be able to refer to
+#       pre-existing variables and methods to use with the GUI instead of having to make iit up as the GUI is created. So that being said, the battle system is close to being done so
+#       finishing that and creating the betting system are our top priorities right now. After that and the GUI we can get working on saving and reading to a file. Carter and Tim have
+#       done some work on that already and it doesn't seem to be that difficult.
 
 
 
