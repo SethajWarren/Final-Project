@@ -68,11 +68,15 @@ class Card(object):
 class Battle(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
+        
 
     def main(self):
         self.retrieve()
         #self.mainScreen()
-        self.gameScreen()
+        self.createCards()
+
+        #this will be a button click
+        self.play()
         pass
     
     def mainScreen(self):
@@ -135,8 +139,6 @@ class Battle(Frame):
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, sticky=S, rowspan = 6)
 
-
-    
     def store(self):
         #option to purchase in-game items, decks, backgrounds
         pass
@@ -338,34 +340,28 @@ class Battle(Frame):
         return mydeck, oppdeck
 
     def play(self):
-        Battle.i = 0
-        self.createCards()
         self.gameScreen()
-
         #right now this just battles 10 times so you can see what's going on.
-        while (True):
-            Battle.i += 1
-            self.battle()
-            if(len(Battle.me) == 0):
-                if (len(Battle.meQ) == 0):
-                    self.endGame()
-                    break
-                else:
-                    Battle.me = self.shuffle(Battle.me, Battle.meQ)
-                    
-            if(len(Battle.opponent) == 0):
-                if (len(Battle.oppQ) == 0):
-                    self.endGame()
-                    break
-                else:
-                    Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
-            
+        self.battle()
+        if(len(Battle.me) == 0):
+            if (len(Battle.meQ) == 0):
+                self.endGame()
+                break
+            else:
+                Battle.me = self.shuffle(Battle.me, Battle.meQ)
+                
+        if(len(Battle.opponent) == 0):
+            if (len(Battle.oppQ) == 0):
+                self.endGame()
+                break
+            else:
+                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+        
         #runs the game
-    
+
 
 
 #########################################################
-
 WIDTH = 1080
 HEIGHT = 720
 window = Tk()
