@@ -83,51 +83,57 @@ class Battle(Frame):
 
         Battle.currentBet = 100
 
-        img = PhotoImage(file = "Pictures/superBetUp")
-        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        totalMoney = Label(self.master, bg = Battle.bg, text = "Money\n" + str(Battle.money), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
+        
+        img = PhotoImage(file = "Pictures/superBetUp.gif")
+        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg)
         superBetUp.image = img
-        superBetUp.grid(row=0, column=0, sticky=N+S+E+W)
+        superBetUp.grid(row=4, column=0, sticky = NSEW)
 
-        img = PhotoImage(file = "Pictures/betUp")
+        img = PhotoImage(file = "Pictures/betUp.gif")
         betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         betUp.image = img
-        betUp.grid(row=1, column=0, sticky=N+S+E+W)
+        betUp.grid(row=5, column=0, sticky = NSEW)
 
         currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
-        currentBet.grid(row=2, column=0, sticky=N+S+E+W)
+        currentBet.grid(row=6, column=0, sticky = NSEW)
 
-        img = PhotoImage(file = "Pictures/betDown")
+        img = PhotoImage(file = "Pictures/betDown.gif")
         betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         betDown.image = img
-        betDown.grid(row=3, column=0, sticky=N+S+E+W)
+        betDown.grid(row=7, column=0, sticky = NSEW)
 
-        img = PhotoImage(file = "Pictures/superBetDown")
+        img = PhotoImage(file = "Pictures/superBetDown.gif")
         superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         superBetDown.image = img
-        superBetDown.grid(row=4, column=0, sticky=N+S+E+W)
-        
-        totalMoney = Label(self.master, bg = Battle.bg, text = str(Battle.money), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
-        totalMoney.grid(row=5, column=0, sticky=N+S+E+W)
+        superBetDown.grid(row=8, column=0, sticky = NSEW)
+
+        Text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        Text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
+
+        Text2 = Label(self.master, bg = Battle.bg, text = "VS", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        Text2.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
 
         img = PhotoImage(file = Card.cardBack)
         oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppCard.image = img
-        oppCard.grid(row=0, column=2, sticky=N+S+E+W)
+        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6)
 
         img = PhotoImage(file = Card.cardBack)
-        oppDeck = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0)
+        oppDeck = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppDeck.image = img
-        oppDeck.grid(row=0, column=3, sticky=N+S+E+W)
+        oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6)
 
         img = PhotoImage(file = Card.cardBack)
         playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.image = img
-        playerCard.grid(row=3, column=2, sticky=N+S+E+W)
+        playerCard.grid(row=7, column=2, sticky=S, rowspan = 6)
 
         img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0)
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0, activebackground=Battle.bg)
         playerDeck.image = img
-        playerDeck.grid(row=3, column=3, sticky=N+S+E+W)
+        playerDeck.grid(row=7, column=3, sticky=S, rowspan = 6)
 
     
     def store(self):
