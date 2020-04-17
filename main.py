@@ -45,7 +45,7 @@ class Card(object):
 
     @property
     def image(self):
-        return self._image
+        return "/Pictures" + self._image
 
     @image.setter
     def image(self, value):
@@ -68,16 +68,21 @@ class Card(object):
 class Battle(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
-        
+
+    def main(self):
+        self.retrieve()
+        #self.mainScreen()
+        self.gameScreen()
+        pass
+    
     def mainScreen(self):
-        #main screen: options to play, go to store, equip modifiers: (eg. table backgrounds, deck colors)
-
-        # main set up for game
-        Battle.money = 0
-
-        Battle.currentBet = 0
+        pass
         
-        # The opponent deck and card
+    def gameScreen(self):
+        #game screen
+        Battle.bg = "darkolivegreen"
+
+        Battle.currentBet = 100
 
         superBetUp = Button(self.master, bg = Battle.bg, text="superBetUp.gif", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         superBetUp.grid(row=0, column=0, sticky=N+S+E+W)
@@ -97,16 +102,16 @@ class Battle(Frame):
         totalMoney = Label(self.master, bg = Battle.bg, text=str(Battle.money), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         totalMoney.grid(row=5, column=0, sticky=N+S+E+W)
         
-        oppCard = Label(self.master, bg = Battle.bg, text="Battle.opponentCard.Image", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppCard = Label(self.master, bg = Battle.bg, text="Battle.opponentCard.image", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppCard.grid(row=0, column=2, rowspan=3, sticky=N+S+E+W)
         
-        oppDeck = Label(self.master, bg = Battle.bg, image=Battle.back, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppDeck = Label(self.master, bg = Battle.bg, image = Card.back, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppDeck.grid(row=0, column=3, rowspan=3, sticky=N+S+E+W)
 
-        playerCard = Label(self.master, bg = Battle.bg, text="Battle.playerCard.image", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerCard = Label(self.master, bg = Battle.bg, text = "Battle.playerCard.image" , borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.grid(row=3, column=2, rowspan=3, sticky=N+S+E+W)
         
-        playerDeck = Button(self.master, bg = Battle.bg, image=Battle.back, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerDeck = Button(self.master, bg = Battle.bg, image = Card.back, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerDeck.grid(row=3, column=3, rowspan=3, sticky=N+S+E+W)
     
     def store(self):
@@ -114,13 +119,20 @@ class Battle(Frame):
         pass
 
     def options(self):
-        #settings screen, equip modifiers
-        Battle.bg = "darkolivegreen"
-        Battle.back = "card.gif"
+        pass
 
     def save(self):
-        #save money and high scores, stuff unlocked, etc
-        pass
+        savefile = open("save.txt", "w")
+        s = "{} {} {} {}".format(money, difficulty, color, cardback)
+        savefile.write(s)
+        savefile.close()
+
+    def retrieve(self):
+        savefile = open("save.txt", "r")
+        fileread = savefile.read()
+        Battle.money, Battle.difficulty, Battle.color, Battle.cardback = fileread.split()
+        Battle.money = int(Battle.money)
+        savefile.close()
 
     def bet(self):
         #bet from your pool of money, calculates the money you get after each hand
@@ -284,12 +296,7 @@ class Battle(Frame):
         Battle.meQ = []
         Battle.oppQ = []
 
-        Battle.going = True        
-
-
-    def setImage(self):
-        #sets the images of the cards on screen for the player to see
-        pass
+        Battle.going = True
     
     def shuffleStart(self, deck):
         #starts the game by shuffling and distributing cards
@@ -308,7 +315,7 @@ class Battle(Frame):
     def play(self):
         Battle.i = 0
         self.createCards()
-        self.setImage()
+        self.gameScreen()
 
         #right now this just battles 10 times so you can see what's going on.
         while (True):
@@ -340,8 +347,7 @@ window = Tk()
 window.geometry("{}x{}".format(WIDTH, HEIGHT))
 window.title("War")
 g = Battle(window)
-g.options()
-g.mainScreen()
+g.main()
 window.mainloop()
 
 
