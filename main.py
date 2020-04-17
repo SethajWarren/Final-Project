@@ -83,12 +83,12 @@ class Battle(Frame):
 
         Battle.currentBet = 100
 
-        img = PhotoImage(file = Card.cardBack)
+        img = PhotoImage(file = "Pictures/superBetUp")
         superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         superBetUp.image = img
         superBetUp.grid(row=0, column=0, sticky=N+S+E+W)
 
-        img = PhotoImage(file = Card.cardBack)
+        img = PhotoImage(file = "Pictures/betUp")
         betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         betUp.image = img
         betUp.grid(row=1, column=0, sticky=N+S+E+W)
@@ -96,12 +96,12 @@ class Battle(Frame):
         currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         currentBet.grid(row=2, column=0, sticky=N+S+E+W)
 
-        img = PhotoImage(file = Card.cardBack)
+        img = PhotoImage(file = "Pictures/betDown")
         betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         betDown.image = img
         betDown.grid(row=3, column=0, sticky=N+S+E+W)
 
-        img = PhotoImage(file = Card.cardBack)
+        img = PhotoImage(file = "Pictures/superBetDown")
         superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         superBetDown.image = img
         superBetDown.grid(row=4, column=0, sticky=N+S+E+W)
@@ -112,22 +112,22 @@ class Battle(Frame):
         img = PhotoImage(file = Card.cardBack)
         oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppCard.image = img
-        oppCard.grid(row=0, column=2, rowspan=3, sticky=N+S+E+W)
+        oppCard.grid(row=0, column=2, sticky=N+S+E+W)
 
         img = PhotoImage(file = Card.cardBack)
         oppDeck = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0)
         oppDeck.image = img
-        oppDeck.grid(row=0, column=3, rowspan=3, sticky=N+S+E+W)
+        oppDeck.grid(row=0, column=3, sticky=N+S+E+W)
 
         img = PhotoImage(file = Card.cardBack)
         playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.image = img
-        playerCard.grid(row=3, column=2, rowspan=3, sticky=N+S+E+W)
+        playerCard.grid(row=3, column=2, sticky=N+S+E+W)
 
         img = PhotoImage(file = Card.cardBack)
         playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0)
         playerDeck.image = img
-        playerDeck.grid(row=3, column=3, rowspan=3, sticky=N+S+E+W)
+        playerDeck.grid(row=3, column=3, sticky=N+S+E+W)
 
     
     def store(self):
@@ -145,6 +145,7 @@ class Battle(Frame):
         saveFile.close()     
 
     def retrieve(self):
+        # retireves the settings from the save.txt file
         saveFile = open("save.txt", "r")
         fileread = saveFile.read()
         Battle.money, Battle.difficulty, Battle.bg, Card.cardBack = fileread.split()
