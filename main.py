@@ -73,7 +73,6 @@ class Battle(Frame):
         #main screen: options to play, go to store, equip modifiers: (eg. table backgrounds, deck colors)
 
         # main set up for game
-        Battle.money = 0
 
         Battle.currentBet = 0
         
@@ -116,11 +115,16 @@ class Battle(Frame):
     def options(self):
         #settings screen, equip modifiers
         Battle.bg = "darkolivegreen"
-        Battle.back = "card.gif"
+        Battle.cardBack = "card.gif"
+    
 
     def save(self):
         #save money and high scores, stuff unlocked, etc
-        pass
+        saveFile = open("save.txt", "w")
+        s = "{} {} {} {}".format(Battle.money, Battle.difficulty, Battle.color, Battle.cardBack)
+        saveFile.write(s)
+        saveFile.close()
+                
 
     def bet(self):
         #bet from your pool of money, calculates the money you get after each hand
