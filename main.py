@@ -83,16 +83,11 @@ class Battle(Frame):
 
         Battle.currentBet = 100
 
-<<<<<<< Updated upstream
         totalMoney = Label(self.master, bg = Battle.bg, text = "Money\n" + str(Battle.money), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
         
         img = PhotoImage(file = "Pictures/superBetUp.gif")
         superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg)
-=======
-        img = PhotoImage(file = "Pictures/superBetUp.gif")
-        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
->>>>>>> Stashed changes
         superBetUp.image = img
         superBetUp.grid(row=4, column=0, sticky = NSEW)
 
@@ -123,38 +118,23 @@ class Battle(Frame):
         img = PhotoImage(file = Card.cardBack)
         oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppCard.image = img
-<<<<<<< Updated upstream
         oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6)
-=======
-        oppCard.grid(row=0, column=2, rowspan=2, sticky=N+S+E+W)
->>>>>>> Stashed changes
 
         img = PhotoImage(file = Card.cardBack)
         oppDeck = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppDeck.image = img
-<<<<<<< Updated upstream
         oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6)
-=======
-        oppDeck.grid(row=0, column=3, rowspan=2, sticky=N+S+E+W)
->>>>>>> Stashed changes
 
         img = PhotoImage(file = Card.cardBack)
         playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.image = img
-<<<<<<< Updated upstream
         playerCard.grid(row=7, column=2, sticky=S, rowspan = 6)
-=======
-        playerCard.grid(row=4, column=2, rowspan=2, sticky=N+S+E+W)
->>>>>>> Stashed changes
 
         img = PhotoImage(file = Card.cardBack)
         playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0, activebackground=Battle.bg)
         playerDeck.image = img
-<<<<<<< Updated upstream
         playerDeck.grid(row=7, column=3, sticky=S, rowspan = 6)
-=======
-        playerDeck.grid(row=4, column=3, rowspan=2, sticky=N+E+S+W)
->>>>>>> Stashed changes
+
 
     
     def store(self):
