@@ -100,13 +100,13 @@ class Battle(Frame):
         oppCard = Label(self.master, bg = Battle.bg, text="Battle.opponentCard.Image", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppCard.grid(row=0, column=2, rowspan=3, sticky=N+S+E+W)
         
-        oppDeck = Label(self.master, bg = Battle.bg, text="Battle.back", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppDeck = Label(self.master, bg = Battle.bg, image=Battle.back, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         oppDeck.grid(row=0, column=3, rowspan=3, sticky=N+S+E+W)
 
         playerCard = Label(self.master, bg = Battle.bg, text="Battle.playerCard.image", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.grid(row=3, column=2, rowspan=3, sticky=N+S+E+W)
         
-        playerDeck = Button(self.master, bg = Battle.bg, text="Battle.back", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerDeck = Button(self.master, bg = Battle.bg, image=Battle.back, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerDeck.grid(row=3, column=3, rowspan=3, sticky=N+S+E+W)
     
     def store(self):
@@ -116,7 +116,7 @@ class Battle(Frame):
     def options(self):
         #settings screen, equip modifiers
         Battle.bg = "darkolivegreen"
-        Battle.back = "back.gif"
+        Battle.back = "card.gif"
 
     def save(self):
         #save money and high scores, stuff unlocked, etc
