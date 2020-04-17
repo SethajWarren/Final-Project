@@ -122,10 +122,12 @@ class Battle(Frame):
         pass
 
     def save(self):
-        savefile = open("save.txt", "w")
-        s = "{} {} {} {}".format(money, difficulty, color, cardback)
-        savefile.write(s)
-        savefile.close()
+        #save money and high scores, stuff unlocked, etc
+        saveFile = open("save.txt", "w")
+        s = "{} {} {} {}".format(Battle.money, Battle.difficulty, Battle.color, Battle.cardBack)
+        saveFile.write(s)
+        saveFile.close()
+                
 
     def retrieve(self):
         savefile = open("save.txt", "r")
