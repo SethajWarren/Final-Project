@@ -91,12 +91,12 @@ class Battle(Frame):
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
         
         img = PhotoImage(file = "Pictures/superBetUp.gif")
-        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg)
+        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supUp"))
         superBetUp.image = img
         superBetUp.grid(row=4, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/betUp.gif")
-        betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "up"))
         betUp.image = img
         betUp.grid(row=5, column=0, sticky = NSEW)
 
@@ -104,12 +104,12 @@ class Battle(Frame):
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/betDown.gif")
-        betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "down"))
         betDown.image = img
         betDown.grid(row=7, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/superBetDown.gif")
-        superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supDown"))
         superBetDown.image = img
         superBetDown.grid(row=8, column=0, sticky = NSEW)
 
@@ -161,9 +161,38 @@ class Battle(Frame):
         Battle.money = int(Battle.money)
         saveFile.close()
 
-    def bet(self):
+    def bet(self, value=None):
         #bet from your pool of money, calculates the money you get after each hand
-        pass
+
+        if (value == "up"):
+            Battle.currentBet += 100
+                
+        elif (value == "supUp"):
+            Battle.currentBet += 500
+           
+        elif (value == "down"):
+            Battle.currentBet -= 100
+
+        elif (value == "supDown"):
+            Battle.currentBet -= 500
+
+        if (Battle.currentBet >= Battle.money):
+            Battle.currentBet -= (Battle.currentBet - Battle.money)
+
+        if (Battle.currentBet < 0):
+            Battle.currentBet -= Battle.currentBet
+                
+        if (value == "me"):
+            Battle.money += Battle.currentBet
+
+        elif (value == "opponent"):
+            Battle.money -= Battle.currentBet
+
+        print Battle.currentBet
+            
+                
+                
+        
 
     def shuffle(self, Odeck, deck):
         deck_ = []
@@ -202,11 +231,14 @@ class Battle(Frame):
             winner = "opponent"
             Battle.oppQ.append(myCard)
             Battle.oppQ.append(oppCard)
+            Battle.bet(self, winner)
+            
 
         elif (myCard.rank > oppCard.rank):
             winner = "me"
             Battle.meQ.append(myCard)
             Battle.meQ.append(oppCard)
+            Battle.bet(self, winner)
         
         elif (myCard.rank == oppCard.rank):
             megabattle = [myCard, oppCard]
@@ -254,12 +286,14 @@ class Battle(Frame):
                     winner = "opponent"
                     for item in megabattle:
                         Battle.oppQ.append(item)
+                    Battle.bet(self, winner)
                     break
 
                 elif (myCard.rank > oppCard.rank):
                     winner = "me"
                     for item in megabattle:
                         Battle.meQ.append(item)
+                    Battle.bet(self, winner)
                     break
                 
                                 
@@ -346,14 +380,12 @@ class Battle(Frame):
         if(len(Battle.me) == 0):
             if (len(Battle.meQ) == 0):
                 self.endGame()
-                break
             else:
                 Battle.me = self.shuffle(Battle.me, Battle.meQ)
                 
         if(len(Battle.opponent) == 0):
             if (len(Battle.oppQ) == 0):
                 self.endGame()
-                break
             else:
                 Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
         
@@ -409,6 +441,11 @@ window.mainloop()
 #         added some random variables that are tracking the number of games played, those will be removed later
 #         NEEDS: user input to move on, gui, etc.
 #         This is just the base game logic working. if you see any issues (probably are some) let me know
+
+# Seth: Put in place a bet system that should work with the battle system once we can allow the player to initiate the individual battles. The betting system doesn't allow the player to
+#       bet a negative amount of money and also does not allow them to bet more than the money they have.
+#
+#       So next we need to continue to work on what we discussed prior
 
 
 
