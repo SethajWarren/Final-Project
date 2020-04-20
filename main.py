@@ -76,8 +76,7 @@ class Battle(Frame):
         #self.mainScreen()
         self.createCards()
 
-        #this will be a button click
-        self.play()
+        self.gameScreen()
         pass
     
     def mainScreen(self):
@@ -85,63 +84,61 @@ class Battle(Frame):
         
     def gameScreen(self):
         #game screen
-
-
+        
         Battle.currentBet = 0
-
 
         totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
         
         img = PhotoImage(file = "Pictures/superBetUp.gif")
-        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supUp"))
+        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg, command = lambda:self.bet(str(supUp)))
         superBetUp.image = img
         superBetUp.grid(row=4, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/betUp.gif")
-        betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "up"))
+        betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(up)))
         betUp.image = img
         betUp.grid(row=5, column=0, sticky = NSEW)
 
-        currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/betDown.gif")
-        betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "down"))
+        betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(supDown)))
         betDown.image = img
         betDown.grid(row=7, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/superBetDown.gif")
-        superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supDown"))
+        superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(down)))
         superBetDown.image = img
         superBetDown.grid(row=8, column=0, sticky = NSEW)
 
         Text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         Text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
 
-        Text2 = Label(self.master, bg = Battle.bg, text = "VS", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        Text2 = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         Text2.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
 
         img = PhotoImage(file = Card.cardBack)
-        oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0)
         oppCard.image = img
-        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6)
+        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        oppDeck = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppDeck = Label(self.master, bg = Battle.bg, image = img, activebackground=Battle.bg)
         oppDeck.image = img
-        oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6)
+        oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6, ipadx = 20, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
         playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.image = img
-        playerCard.grid(row=7, column=2, sticky=S, rowspan = 6)
+        playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0, activebackground=Battle.bg, command=lambda:Battle.play(self))
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.play())
         playerDeck.image = img
-        playerDeck.grid(row=7, column=3, sticky=S, rowspan = 6)
-
+        playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
+        
     def store(self):
         #option to purchase in-game items, decks, backgrounds
         pass
@@ -164,9 +161,8 @@ class Battle(Frame):
         Battle.money = int(Battle.money)
         saveFile.close()
 
-    def bet(self, value=None):
+    def bet(self, value):
         #bet from your pool of money, calculates the money you get after each hand
-
         if (value == "up"):
             Battle.currentBet += 10
                 
@@ -233,7 +229,7 @@ class Battle(Frame):
             winner = "opponent"
             Battle.oppQ.append(myCard)
             Battle.oppQ.append(oppCard)
-            Battle.bet(self, winner)
+            self.bet(winner)
             print winner
             
 
@@ -241,7 +237,7 @@ class Battle(Frame):
             winner = "me"
             Battle.meQ.append(myCard)
             Battle.meQ.append(oppCard)
-            Battle.bet(self, winner)
+            self.bet(winner)
             print winner
         
         elif (myCard.rank == oppCard.rank):
@@ -280,24 +276,19 @@ class Battle(Frame):
                 del Battle.me[0]
                 megabattle.append(myCard)
                 
-            if (len(Battle.opponent) > 0):
-                oppCard = Battle.opponent[0]
-                del Battle.opponent[0]
-                megabattle.append(oppCard)
-            
             
             if (myCard.rank < oppCard.rank):
                 winner = "opponent"
                 for item in megabattle:
                     Battle.oppQ.append(item)
-                Battle.bet(self, winner)
+                self.bet(winner)
                 print winner
 
             elif (myCard.rank > oppCard.rank):
                 winner = "me"
                 for item in megabattle:
                     Battle.meQ.append(item)
-                Battle.bet(self, winner)
+                self.bet(winner)
                 print winner
                 
                                 
@@ -399,7 +390,7 @@ class Battle(Frame):
 
 #########################################################
 WIDTH = 1080
-HEIGHT = 720
+HEIGHT = 687
 window = Tk()
 window.geometry("{}x{}".format(WIDTH, HEIGHT))
 window.title("War")
@@ -446,18 +437,12 @@ window.mainloop()
 #         NEEDS: user input to move on, gui, etc.
 #         This is just the base game logic working. if you see any issues (probably are some) let me know
 
-# Seth: Put in place a bet system that should work with the battle system once we can allow the player to initiate the individual battles. The betting system doesn't allow the player to
-#       bet a negative amount of money and also does not allow them to bet more than the money they have.
-#
-#       So next we need to continue to work on what we discussed prior
 
 # Timothy: Allowed the bet function to display the currentBet amount on the GUI screen
 #           the (bet) buttons also had their borderwidth changed to account for more button-like looks
 #           though they are quite large; I am considering making
 #           an UpdateButton function to make that process easier later
 #       
-
-
 
 
 
