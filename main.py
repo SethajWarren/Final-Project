@@ -85,9 +85,9 @@ class Battle(Frame):
     def gameScreen(self):
         #game screen
 
-        Battle.currentBet = 100
+        Battle.currentBet = 0
 
-        totalMoney = Label(self.master, bg = Battle.bg, text = "Money\n" + str(Battle.money), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
         
         img = PhotoImage(file = "Pictures/superBetUp.gif")
@@ -100,7 +100,7 @@ class Battle(Frame):
         betUp.image = img
         betUp.grid(row=5, column=0, sticky = NSEW)
 
-        currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/betDown.gif")
@@ -116,7 +116,7 @@ class Battle(Frame):
         Text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         Text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
 
-        Text2 = Label(self.master, bg = Battle.bg, text = "VS", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        Text2 = Label(self.master, bg = Battle.bg, text = "VS", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         Text2.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
 
         img = PhotoImage(file = Card.cardBack)
@@ -135,7 +135,7 @@ class Battle(Frame):
         playerCard.grid(row=7, column=2, sticky=S, rowspan = 6)
 
         img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0, activebackground=Battle.bg)
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0, activebackground=Battle.bg, command=lambda:Battle.play(self))
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, sticky=S, rowspan = 6)
 
@@ -165,19 +165,19 @@ class Battle(Frame):
         #bet from your pool of money, calculates the money you get after each hand
 
         if (value == "up"):
-            Battle.currentBet += 100
+            Battle.currentBet += 10
                 
         elif (value == "supUp"):
-            Battle.currentBet += 500
+            Battle.currentBet += 100
            
         elif (value == "down"):
-            Battle.currentBet -= 100
+            Battle.currentBet -= 10
 
         elif (value == "supDown"):
-            Battle.currentBet -= 500
+            Battle.currentBet -= 100
 
         if (Battle.currentBet >= Battle.money):
-            Battle.currentBet -= (Battle.currentBet - Battle.money)
+            Battle.currentBet -= (Battle.currentBet-Battle.money)
 
         if (Battle.currentBet < 0):
             Battle.currentBet -= Battle.currentBet
@@ -190,10 +190,6 @@ class Battle(Frame):
 
         print Battle.currentBet
             
-                
-                
-        
-
     def shuffle(self, Odeck, deck):
         deck_ = []
         while (len(Odeck) > 0):
@@ -216,7 +212,6 @@ class Battle(Frame):
         if (len(Battle.me) < len(Battle.opponent)):
             Winner = "opponent"
         print Winner
-        print Battle.i
         print len(Battle.me) + len(Battle.meQ)
         print len(Battle.opponent) + len(Battle.oppQ)
         
@@ -232,6 +227,7 @@ class Battle(Frame):
             Battle.oppQ.append(myCard)
             Battle.oppQ.append(oppCard)
             Battle.bet(self, winner)
+            print winner
             
 
         elif (myCard.rank > oppCard.rank):
@@ -239,62 +235,63 @@ class Battle(Frame):
             Battle.meQ.append(myCard)
             Battle.meQ.append(oppCard)
             Battle.bet(self, winner)
+            print winner
         
         elif (myCard.rank == oppCard.rank):
             megabattle = [myCard, oppCard]
-            while (True):
-                #adds the queue to the players decks if  they dont have enough to mega battle
-                if (len(Battle.me) < 4):
-                    Battle.me = self.shuffle(Battle.me, Battle.meQ)
-                if (len(Battle.opponent) < 4):
-                    Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+            
+            #adds the queue to the players decks if  they dont have enough to mega battle
+            if (len(Battle.me) < 4):
+                Battle.me = self.shuffle(Battle.me, Battle.meQ)
+            if (len(Battle.opponent) < 4):
+                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
 
-                #if they still dont have enough, they battle with however many they have
-                if (len(Battle.me) < 4 and len(Battle.me) > 0):
-                    for i in range(len(Battle.me) - 2):
-                        megabattle.append(Battle.me[0])
-                        del Battle.me[0]
-                else:
-                    for i in range(3):
-                        megabattle.append(Battle.me[0])
-                        del Battle.me[0]
- 
-                if (len(Battle.opponent) < 4 and len(Battle.opponent) > 0):
-                    for i in range(len(Battle.opponent) - 2):
-                        megabattle.append(Battle.opponent[0])
-                        del Battle.opponent[0]
-                else:
-                    for i in range(3):
-                        megabattle.append(Battle.opponent[0])
-                        del Battle.opponent[0]
-
-                print len(Battle.me)
-                print len(Battle.opponent)
-                
-                if (len(Battle.me) > 0):
-                    myCard = Battle.me[0]
+            #if they still dont have enough, they battle with however many they have
+            if (len(Battle.me) < 4 and len(Battle.me) > 0):
+                for i in range(len(Battle.me) - 2):
+                    megabattle.append(Battle.me[0])
                     del Battle.me[0]
-                    megabattle.append(myCard)
-                    
-                if (len(Battle.opponent) > 0):
-                    oppCard = Battle.opponent[0]
-                    del Battle.opponent[0]
-                    megabattle.append(oppCard)
-                
-                
-                if (myCard.rank < oppCard.rank):
-                    winner = "opponent"
-                    for item in megabattle:
-                        Battle.oppQ.append(item)
-                    Battle.bet(self, winner)
-                    break
+            else:
+                for i in range(3):
+                    megabattle.append(Battle.me[0])
+                    del Battle.me[0]
 
-                elif (myCard.rank > oppCard.rank):
-                    winner = "me"
-                    for item in megabattle:
-                        Battle.meQ.append(item)
-                    Battle.bet(self, winner)
-                    break
+            if (len(Battle.opponent) < 4 and len(Battle.opponent) > 0):
+                for i in range(len(Battle.opponent) - 2):
+                    megabattle.append(Battle.opponent[0])
+                    del Battle.opponent[0]
+            else:
+                for i in range(3):
+                    megabattle.append(Battle.opponent[0])
+                    del Battle.opponent[0]
+
+            print len(Battle.me)
+            print len(Battle.opponent)
+            
+            if (len(Battle.me) > 0):
+                myCard = Battle.me[0]
+                del Battle.me[0]
+                megabattle.append(myCard)
+                
+            if (len(Battle.opponent) > 0):
+                oppCard = Battle.opponent[0]
+                del Battle.opponent[0]
+                megabattle.append(oppCard)
+            
+            
+            if (myCard.rank < oppCard.rank):
+                winner = "opponent"
+                for item in megabattle:
+                    Battle.oppQ.append(item)
+                Battle.bet(self, winner)
+                print winner
+
+            elif (myCard.rank > oppCard.rank):
+                winner = "me"
+                for item in megabattle:
+                    Battle.meQ.append(item)
+                Battle.bet(self, winner)
+                print winner
                 
                                 
     def createCards(self):
