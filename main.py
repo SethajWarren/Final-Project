@@ -1,3 +1,4 @@
+# -*- coding: cp1252 -*-
 ###################################################################################
 # Team Members: Seth Warren
 #               Carter Ray
@@ -85,31 +86,31 @@ class Battle(Frame):
     def gameScreen(self):
         #game screen
 
-        Battle.currentBet = 100
+        Battle.currentBet = 10
 
         totalMoney = Label(self.master, bg = Battle.bg, text = "Money\n" + str(Battle.money), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
         
         img = PhotoImage(file = "Pictures/superBetUp.gif")
-        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supUp"))
+        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supUp"))
         superBetUp.image = img
         superBetUp.grid(row=4, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/betUp.gif")
-        betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "up"))
+        betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "up"))
         betUp.image = img
         betUp.grid(row=5, column=0, sticky = NSEW)
 
-        currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        currentBet = Label(self.master, bg = Battle.bg, text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/betDown.gif")
-        betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "down"))
+        betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "down"))
         betDown.image = img
         betDown.grid(row=7, column=0, sticky = NSEW)
 
         img = PhotoImage(file = "Pictures/superBetDown.gif")
-        superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supDown"))
+        superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=2, highlightthickness=0, activebackground=Battle.bg, command=lambda:Battle.bet(self, "supDown"))
         superBetDown.image = img
         superBetDown.grid(row=8, column=0, sticky = NSEW)
 
@@ -165,16 +166,16 @@ class Battle(Frame):
         #bet from your pool of money, calculates the money you get after each hand
 
         if (value == "up"):
-            Battle.currentBet += 100
+            Battle.currentBet += 10
                 
         elif (value == "supUp"):
-            Battle.currentBet += 500
+            Battle.currentBet += 50
            
         elif (value == "down"):
-            Battle.currentBet -= 100
+            Battle.currentBet -= 10
 
         elif (value == "supDown"):
-            Battle.currentBet -= 500
+            Battle.currentBet -= 50
 
         if (Battle.currentBet >= Battle.money):
             Battle.currentBet -= (Battle.currentBet - Battle.money)
@@ -188,7 +189,11 @@ class Battle(Frame):
         elif (value == "opponent"):
             Battle.money -= Battle.currentBet
 
-        print Battle.currentBet
+
+        # overwrites the current label in the GUI to display
+        currentBet = Label(self.master, bg = Battle.bg, text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        currentBet.grid(row=6, column=0, sticky = NSEW)
+
             
                 
                 
