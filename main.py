@@ -451,6 +451,12 @@ window.mainloop()
 #
 #       So next we need to continue to work on what we discussed prior
 
+# Timothy: Allowed the bet function to display the currentBet amount on the GUI screen
+#           the (bet) buttons also had their borderwidth changed to account for more button-like looks
+#           though they are quite large; I am considering making
+#           an UpdateButton function to make that process easier later
+#       
+
 
 
 
