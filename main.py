@@ -1,4 +1,3 @@
-# -*- coding: cp1252 -*-
 ###################################################################################
 # Team Members: Seth Warren
 #               Carter Ray
@@ -11,7 +10,7 @@
 ###################################################################################
 
 from Tkinter import *
-import time
+from time import sleep
 from random import randint
 
 
@@ -50,7 +49,7 @@ class Card(object):
 
     @image.setter
     def image(self, value):
-        self._image = value
+        self._image = "Pictures/" + value
 
     def __str__(self):
         value = self.rank
@@ -74,8 +73,8 @@ class Battle(Frame):
     def main(self):
         self.retrieve()
         #self.mainScreen()
-        self.createCards()
 
+        self.createCards()
         self.gameScreen()
         pass
     
@@ -84,61 +83,77 @@ class Battle(Frame):
         
     def gameScreen(self):
         #game screen
-        
-        Battle.currentBet = 0
+        print Battle.going
+        if (Battle.going == None):
+            Battle.currentBet = 0
+       
+            img = PhotoImage(file = "Pictures/superBetUp.gif")
+            superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg, command = lambda:self.bet(str(supUp)))
+            superBetUp.image = img
+            superBetUp.grid(row=4, column=0, sticky = NSEW)
 
+            img = PhotoImage(file = "Pictures/betUp.gif")
+            betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(up)))
+            betUp.image = img
+            betUp.grid(row=5, column=0, sticky = NSEW)
+
+            img = PhotoImage(file = "Pictures/betDown.gif")
+            betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(supDown)))
+            betDown.image = img
+            betDown.grid(row=7, column=0, sticky = NSEW)
+
+            img = PhotoImage(file = "Pictures/superBetDown.gif")
+            superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(down)))
+            superBetDown.image = img
+            superBetDown.grid(row=8, column=0, sticky = NSEW)
+
+            Text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+            Text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
+
+            battleButton = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+            battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
+            
+            oppCard = Label(self.master, bg = Battle.bg, text = "", borderwidth=0)
+            oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+            
+            playerCard = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+            playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+            Battle.going = True
+            
+            i = 0
+        else:
+            img = PhotoImage(file = Battle.opponent[0].image)
+            oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0)
+            oppCard.image = img
+            oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+            
+            img = PhotoImage(file = Battle.me[0].image)
+            playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+            playerCard.image = img
+            playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+
+            i = 1
+  
         totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
-        
-        img = PhotoImage(file = "Pictures/superBetUp.gif")
-        superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg, command = lambda:self.bet(str(supUp)))
-        superBetUp.image = img
-        superBetUp.grid(row=4, column=0, sticky = NSEW)
 
-        img = PhotoImage(file = "Pictures/betUp.gif")
-        betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(up)))
-        betUp.image = img
-        betUp.grid(row=5, column=0, sticky = NSEW)
-
-        currentBet = Label(self.master, bg = Battle.bg, text = str(Battle.currentBet), activebackground=Battle.bg)
+        currentBet = Label(self.master, bg = Battle.bg, text = "+" + str(Battle.currentBet), activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
-        img = PhotoImage(file = "Pictures/betDown.gif")
-        betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(supDown)))
-        betDown.image = img
-        betDown.grid(row=7, column=0, sticky = NSEW)
-
-        img = PhotoImage(file = "Pictures/superBetDown.gif")
-        superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(down)))
-        superBetDown.image = img
-        superBetDown.grid(row=8, column=0, sticky = NSEW)
-
-        Text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-        Text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
-
-        Text2 = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-        Text2.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
+        battleButton = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
 
         img = PhotoImage(file = Card.cardBack)
-        oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0)
-        oppCard.image = img
-        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
-
-        img = PhotoImage(file = Card.cardBack)
-        oppDeck = Label(self.master, bg = Battle.bg, image = img, activebackground=Battle.bg)
+        oppDeck = Label(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.opponent) + len(Battle.oppQ)-i),activebackground=Battle.bg)
         oppDeck.image = img
         oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6, ipadx = 20, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
-        playerCard.image = img
-        playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
-
-        img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.play())
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.play())
         playerDeck.image = img
-        playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
-        
+        playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)  
+            
+            
     def store(self):
         #option to purchase in-game items, decks, backgrounds
         pass
@@ -214,145 +229,189 @@ class Battle(Frame):
             Winner = "me"
         if (len(Battle.me) < len(Battle.opponent)):
             Winner = "opponent"
+        print "________done________"
         print Winner
-        print len(Battle.me) + len(Battle.meQ)
-        print len(Battle.opponent) + len(Battle.oppQ)
+    
         
     # a battle function that take in itself and an opposing card and compares to determine the winner
     def battle(self):
+        if(len(Battle.me) == 0):
+            if (len(Battle.meQ) == 0):
+                self.endGame()
+            else:
+                Battle.me = self.shuffle(Battle.me, Battle.meQ)
+
+        if(len(Battle.opponent) == 0):
+            if (len(Battle.oppQ) == 0):
+                self.endGame()
+            else:
+                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+                
         myCard = Battle.me[0]
         oppCard = Battle.opponent[0]
-        del Battle.me[0]
-        del Battle.opponent[0]
+        self.gameScreen()
         
         if (myCard.rank < oppCard.rank):
             winner = "opponent"
             Battle.oppQ.append(myCard)
             Battle.oppQ.append(oppCard)
             self.bet(winner)
-            print winner
             
-
-        elif (myCard.rank > oppCard.rank):
+        if (myCard.rank > oppCard.rank):
             winner = "me"
             Battle.meQ.append(myCard)
             Battle.meQ.append(oppCard)
             self.bet(winner)
-            print winner
-        
-        elif (myCard.rank == oppCard.rank):
-            megabattle = [myCard, oppCard]
             
-            #adds the queue to the players decks if  they dont have enough to mega battle
-            if (len(Battle.me) < 4):
-                Battle.me = self.shuffle(Battle.me, Battle.meQ)
-            if (len(Battle.opponent) < 4):
-                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
-
-            #if they still dont have enough, they battle with however many they have
-            if (len(Battle.me) < 4 and len(Battle.me) > 0):
-                for i in range(len(Battle.me) - 2):
-                    megabattle.append(Battle.me[0])
-                    del Battle.me[0]
-            else:
-                for i in range(3):
-                    megabattle.append(Battle.me[0])
-                    del Battle.me[0]
-
-            if (len(Battle.opponent) < 4 and len(Battle.opponent) > 0):
-                for i in range(len(Battle.opponent) - 2):
-                    megabattle.append(Battle.opponent[0])
-                    del Battle.opponent[0]
-            else:
-                for i in range(3):
-                    megabattle.append(Battle.opponent[0])
-                    del Battle.opponent[0]
-
-            print len(Battle.me)
-            print len(Battle.opponent)
             
-            if (len(Battle.me) > 0):
-                myCard = Battle.me[0]
+        if (myCard.rank == oppCard.rank):
+            megabattle = []
+            battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle(megabattle))
+            battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
+            
+        else:
+            del Battle.me[0]
+            del Battle.opponent[0]
+            print winner        
+            print "\t" + str(myCard),
+            print "\t" + str(oppCard)
+
+        print len(Battle.me)
+        print len(Battle.opponent)
+                
+    def megaBattle(self, megabattle):
+        myCard = Battle.me[0]
+        oppCard = Battle.opponent[0]
+        del Battle.me[0]
+        del Battle.opponent[0]
+        megabattle.append(myCard)
+        megabattle.append(oppCard)
+
+        if (len(Battle.me) < 4):
+            Battle.me = self.shuffle(Battle.me, Battle.meQ)
+            print "me shuffled"
+        if (len(Battle.opponent) < 4):
+            Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+            print "opp shuffled"
+    
+    #if they still dont have enough, they battle with however many they have
+        if (len(Battle.me) < 4):
+            for i in range(len(Battle.me) - 2):
+                megabattle.append(Battle.me[0])
                 del Battle.me[0]
-                megabattle.append(myCard)
-                
-            
-            if (myCard.rank < oppCard.rank):
-                winner = "opponent"
-                for item in megabattle:
-                    Battle.oppQ.append(item)
-                self.bet(winner)
-                print winner
+        else:
+            for i in range(3):
+                megabattle.append(Battle.me[0])
+                del Battle.me[0]
 
-            elif (myCard.rank > oppCard.rank):
-                winner = "me"
-                for item in megabattle:
-                    Battle.meQ.append(item)
-                self.bet(winner)
-                print winner
-                
-                                
+        if (len(Battle.opponent) < 4):
+            for i in range(len(Battle.opponent) - 2):
+                megabattle.append(Battle.opponent[0])
+                del Battle.opponent[0]
+        else:
+            for i in range(3):
+                megabattle.append(Battle.opponent[0])
+                del Battle.opponent[0]
+
+        myCard = Battle.me[0]
+        oppCard = Battle.opponent[0]
+        self.gameScreen()
+        megabattle.append(myCard)
+        megabattle.append(oppCard)
+        del Battle.me[0]
+        del Battle.opponent[0]
+        
+        for i in range(len(megabattle)):
+            print "\t",
+            print megabattle[i]
+            
+        if (myCard.rank < oppCard.rank):
+            winner = "opponent"
+            for item in megabattle:
+                Battle.oppQ.append(item)
+            self.bet(winner)
+        if (myCard.rank > oppCard.rank):
+            winner = "me"
+            for item in megabattle:
+                Battle.meQ.append(item)
+            self.bet(winner)
+
+        self.gameScreen()
+        
+        if (myCard.rank == oppCard.rank):
+            battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle(megabattle))
+            battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
+            
+        
+        
+
     def createCards(self):
-        s2 = Card("Spades", 2, "s2.png")
-        c2 = Card("Clubs", 2, "c2.png")
-        d2 = Card("Diamonds", 2,"d2.png")
-        h2 = Card("Hearts", 2, "h2.png")
-        s3 = Card("Spades", 3, "s3.png")
-        c3 = Card("Clubs", 3, "c3.png")
-        d3 = Card("Diamonds", 3,"d3.png")
-        h3 = Card("Hearts", 3, "h3.png")
-        s4 = Card("Spades", 4, "s4.png")
-        c4 = Card("Clubs", 4, "c4.png")
-        d4 = Card("Diamonds", 4,"d4.png")
-        h4 = Card("Hearts", 4, "h4.png")
-        s5 = Card("Spades", 5, "s5.png")
-        c5 = Card("Clubs", 5, "c5.png")
-        d5 = Card("Diamonds", 5,"d5.png")
-        h5 = Card("Hearts", 5, "h5.png")
-        s6 = Card("Spades", 6, "s6.png")
-        c6 = Card("Clubs", 6, "c6.png")
-        d6 = Card("Diamonds", 6,"d6.png")
-        h6 = Card("Hearts", 6, "h6.png")
-        s7 = Card("Spades", 7, "s2.png")
-        c7 = Card("Clubs", 7, "c7.png")
-        d7 = Card("Diamonds", 7,"d7.png")
-        h7 = Card("Hearts", 7, "h7.png")
-        s8 = Card("Spades", 8, "s8.png")
-        c8 = Card("Clubs", 8, "c8.png")
-        d8 = Card("Diamonds", 8,"d8.png")
-        h8 = Card("Hearts", 8, "h8.png")
-        s9 = Card("Spades", 9, "s9.png")
-        c9 = Card("Clubs", 9, "c9.png")
-        d9 = Card("Diamonds", 9,"d9.png")
-        h9 = Card("Hearts", 9, "h9.png")
-        s10 = Card("Spades", 10, "s10.png")
-        c10 = Card("Clubs", 10, "c10.png")
-        d10 = Card("Diamonds", 10,"d10.png")
-        h10 = Card("Hearts", 10, "h10.png")
-        sJ = Card("Spades", 11, "sJ.png")
-        cJ = Card("Clubs", 11, "cJ.png")
-        dJ = Card("Diamonds", 11,"dJ.png")
-        hJ = Card("Hearts", 11, "hJ.png")
-        sQ = Card("Spades", 12, "sQ.png")
-        cQ = Card("Clubs", 12, "cQ.png")
-        dQ = Card("Diamonds", 12,"dQ.png")
-        hQ = Card("Hearts", 12, "hQ.png")
-        sK = Card("Spades", 13, "sK.png")
-        cK = Card("Clubs", 13, "cK.png")
-        dK = Card("Diamonds", 13,"dK.png")
-        hK = Card("Hearts", 13, "hK.png")
-        sA = Card("Spades", 14, "sA.png")
-        cA = Card("Clubs", 14, "cA.png")
-        dA = Card("Diamonds", 14,"dA.png")
-        hA = Card("Hearts", 14, "hA.png")
+        s2 = Card("Spades", 2, "s2.gif")
+        c2 = Card("Clubs", 2, "c2.gif")
+        d2 = Card("Diamonds", 2,"d2.gif")
+        h2 = Card("Hearts", 2, "h2.gif")
+        s3 = Card("Spades", 3, "s3.gif")
+        c3 = Card("Clubs", 3, "c3.gif")
+        d3 = Card("Diamonds", 3,"d3.gif")
+        h3 = Card("Hearts", 3, "h3.gif")
+        s4 = Card("Spades", 4, "s4.gif")
+        c4 = Card("Clubs", 4, "c4.gif")
+        d4 = Card("Diamonds", 4,"d4.gif")
+        h4 = Card("Hearts", 4, "h4.gif")
+        s5 = Card("Spades", 5, "s5.gif")
+        c5 = Card("Clubs", 5, "c5.gif")
+        d5 = Card("Diamonds", 5,"d5.gif")
+        h5 = Card("Hearts", 5, "h5.gif")
+        s6 = Card("Spades", 6, "s6.gif")
+        c6 = Card("Clubs", 6, "c6.gif")
+        d6 = Card("Diamonds", 6,"d6.gif")
+        h6 = Card("Hearts", 6, "h6.gif")
+        s7 = Card("Spades", 7, "s2.gif")
+        c7 = Card("Clubs", 7, "c7.gif")
+        d7 = Card("Diamonds", 7,"d7.gif")
+        h7 = Card("Hearts", 7, "h7.gif")
+        s8 = Card("Spades", 8, "s8.gif")
+        c8 = Card("Clubs", 8, "c8.gif")
+        d8 = Card("Diamonds", 8,"d8.gif")
+        h8 = Card("Hearts", 8, "h8.gif")
+        s9 = Card("Spades", 9, "s9.gif")
+        c9 = Card("Clubs", 9, "c9.gif")
+        d9 = Card("Diamonds", 9,"d9.gif")
+        h9 = Card("Hearts", 9, "h9.gif")
+        s10 = Card("Spades", 10, "s10.gif")
+        c10 = Card("Clubs", 10, "c10.gif")
+        d10 = Card("Diamonds", 10,"d10.gif")
+        h10 = Card("Hearts", 10, "h10.gif")
+        sJ = Card("Spades", 11, "sJ.gif")
+        cJ = Card("Clubs", 11, "cJ.gif")
+        dJ = Card("Diamonds", 11,"dJ.gif")
+        hJ = Card("Hearts", 11, "hJ.gif")
+        sQ = Card("Spades", 12, "sQ.gif")
+        cQ = Card("Clubs", 12, "cQ.gif")
+        dQ = Card("Diamonds", 12,"dQ.gif")
+        hQ = Card("Hearts", 12, "hQ.gif")
+        sK = Card("Spades", 13, "sK.gif")
+        cK = Card("Clubs", 13, "cK.gif")
+        dK = Card("Diamonds", 13,"dK.gif")
+        hK = Card("Hearts", 13, "hK.gif")
+        sA = Card("Spades", 14, "sA.gif")
+        cA = Card("Clubs", 14, "cA.gif")
+        dA = Card("Diamonds", 14,"dA.gif")
+        hA = Card("Hearts", 14, "hA.gif")
         
         deck = [s2, c2, d2, h2, s3, c3, d3, h3, s4, c4, d4, h4, s5, c5, d5, h5, s6, c6, d6, h6, s7, c7, d7, h7, s8, c8, d8, h8, s9, c9, d9, h9, s10, c10, d10, h10, sJ, cJ, dJ, hJ, sQ, cQ, dQ, hQ, sK, cK, dK, hK, sA, cA, dA, hA]
         Battle.me, Battle.opponent = self.shuffleStart(deck)
 
         Battle.meQ = []
         Battle.oppQ = []
+        
+        Battle.going = None
 
-        Battle.going = True
+        playerCard = Label(self.master, bg = Battle.bg, text = "\t\t\t\t\t\t", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+        
+        oppCard = Label(self.master, bg = Battle.bg, text = "\t\t\t\t\t\t", borderwidth=0)
+        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
     
     def shuffleStart(self, deck):
         #starts the game by shuffling and distributing cards
@@ -369,24 +428,11 @@ class Battle(Frame):
         return mydeck, oppdeck
 
     def play(self):
-        self.gameScreen()
-        #right now this just battles 10 times so you can see what's going on.
-        self.battle()
-        if(len(Battle.me) == 0):
-            if (len(Battle.meQ) == 0):
-                self.endGame()
-            else:
-                Battle.me = self.shuffle(Battle.me, Battle.meQ)
-                
-        if(len(Battle.opponent) == 0):
-            if (len(Battle.oppQ) == 0):
-                self.endGame()
-            else:
-                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
-        
-        #runs the game
-
-
+        if (Battle.going == True):
+            self.battle()
+        else:
+            pass
+               
 
 #########################################################
 WIDTH = 1080
