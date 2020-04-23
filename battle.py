@@ -11,6 +11,8 @@
 
 from Tkinter import *
 from random import randint
+import save
+import betSys
 
 
 ######################
@@ -70,7 +72,7 @@ class Battle(Frame):
         
 
     def main(self):
-        self.retrieve()
+        Battle.money, Battle.difficulty, Battle.bg, Card.cardBack = save.retrieve()
         #self.mainScreen()
 
         self.createCards()
@@ -84,29 +86,35 @@ class Battle(Frame):
         #game screen
         if (Battle.going == None):
             Battle.currentBet = 0
+            
        
             img = PhotoImage(file = "Pictures/superBetUp.gif")
-            superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg, command = lambda:self.bet(str(supUp)))
+            superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg,\
+                                command = lambda:self.bet("supUp", Battle.money, Battle.currentBet))
             superBetUp.image = img
             superBetUp.grid(row=4, column=0, sticky = NSEW)
 
             img = PhotoImage(file = "Pictures/betUp.gif")
-            betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(up)))
+            betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg,\
+                           command = lambda:self.bet("up", Battle.money, Battle.currentBet))
             betUp.image = img
             betUp.grid(row=5, column=0, sticky = NSEW)
 
             img = PhotoImage(file = "Pictures/betDown.gif")
-            betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(supDown)))
+            betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg,\
+                             command = lambda:self.bet("down", Battle.money, Battle.currentBet))
             betDown.image = img
             betDown.grid(row=7, column=0, sticky = NSEW)
 
             img = PhotoImage(file = "Pictures/superBetDown.gif")
-            superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda:self.bet(str(down)))
+            superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg,\
+                                  command = lambda:self.bet("supDown", Battle.money, Battle.currentBet))
             superBetDown.image = img
             superBetDown.grid(row=8, column=0, sticky = NSEW)
 
-            Text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-            Text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
+            saveButton = Button(self.master, bg = Battle.bg, text = "Save", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+                                command = lambda:save.save(Battle.money, Battle.difficulty, Battle.bg, Card.cardBack))
+            saveButton.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
 
             battleButton = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
             battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
@@ -148,9 +156,37 @@ class Battle(Frame):
         oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6, ipadx = 20, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0,\
+                            highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
+
+############## customization buttons ########################       
+##        custom1 = Button(self.master, bg = Battle.bg, text = "Grey", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+##                         command = lambda:self.store("grey"))
+##        custom1.grid(row=0, column=4, sticky = NSEW, rowspan = 2)
+##
+##        custom2 = Button(self.master, bg = Battle.bg, text = "Brown", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+##                         command = lambda:self.store("brown"))
+##        custom2.grid(row=2, column=4, sticky = NSEW, rowspan = 2)
+##
+##        custom3 = Button(self.master, bg = Battle.bg, text = "Blue", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+##                         command = lambda:self.store("blue"))
+##        custom3.grid(row=4, column=4, sticky = NSEW, rowspan = 2)
+##
+##        custom4 = Button(self.master, bg = Battle.bg, text = "Green", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+##                         command = lambda:self.store("green"))
+##        custom4.grid(row=6, column=4, sticky = NSEW, rowspan = 2)
+##
+##        custom5 = Button(self.master, bg = Battle.bg, text = "Red", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+##                         command = lambda:self.store("red"))
+##        custom5.grid(row=8, column=4, sticky = NSEW, rowspan = 2)
+##
+##        custom6 = Button(self.master, bg = Battle.bg, text = "Purple", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+##                         command = lambda:self.store("purple"))
+##        custom6.grid(row=10, column=4, sticky = NSEW, rowspan = 3)
+
+        
 
         if (winner != "tie"):
             pool = Label(self.master, bg = Battle.bg, font=("Arial", 20), text = "")
@@ -179,58 +215,40 @@ class Battle(Frame):
         battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
 
             
-    def store(self):
+    def store(self, value):
         #option to purchase in-game items, decks, backgrounds
-        pass
+        if (value == "grey"):
+            Battle.bg = "slategrey"
+
+        if (value == "brown"):
+            Battle.bg = "sienna4"
+
+        if (value == "blue"):
+            Battle.bg = "dodgerblue4"
+
+        if (value == "green"):
+            Battle.bg = "darkolivegreen"
+
+        if (value == "red"):
+            Battle.bg = "red4"
+
+        if (value == "purple"):
+            Battle.bg = "purple4"
 
     def options(self):
         pass
 
-    def save(self):
-        #save money and high scores, stuff unlocked, etc
-        saveFile = open("save.txt", "w")
-        s = "{} {} {} {}".format(Battle.money, Battle.difficulty, Battle.bg, Card.cardBack)
-        saveFile.write(s)
-        saveFile.close()     
-
-    def retrieve(self):
-        # retireves the settings from the save.txt file
-        saveFile = open("save.txt", "r")
-        fileread = saveFile.read()
-        Battle.money, Battle.difficulty, Battle.bg, Card.cardBack = fileread.split()
-        Battle.money = int(Battle.money)
-        saveFile.close()
-
-    def bet(self, value):
+    def bet(self, value, money, currentBet):
         #bet from your pool of money, calculates the money you get after each hand
-        if (value == "up"):
-            Battle.currentBet += 10
-                
-        elif (value == "supUp"):
-            Battle.currentBet += 50
-           
-        elif (value == "down"):
-            Battle.currentBet -= 10
+        Battle.currentBet, Battle.money = betSys.bet(value, money, currentBet)
 
-        elif (value == "supDown"):
-            Battle.currentBet -= 50
-
-        if (Battle.currentBet >= Battle.money):
-            Battle.currentBet -= (Battle.currentBet-Battle.money)
-
-        if (Battle.currentBet < 0):
-            Battle.currentBet -= Battle.currentBet
-                
-        if (value == "me"):
-            Battle.money += Battle.currentBet
-
-        elif (value == "opponent"):
-            Battle.money -= Battle.currentBet
-
-
-        # overwrites the current label in the GUI to display
+        # overwrites the current label in the GUI to display the players bet
         currentBet = Label(self.master, bg = Battle.bg, text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
+
+        # overwrites the current label in the GUI to display the players currency
+        money = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        money.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
 
             
     def shuffle(self, Odeck, deck):
@@ -269,17 +287,17 @@ class Battle(Frame):
             winner = "opponent"
             Battle.oppQ.append(myCard)
             Battle.oppQ.append(oppCard)
-            self.bet(winner)
+            Battle.currentbet, Battle.money = betSys.bet(winner, Battle.money, Battle.currentBet)
             
         if (myCard.rank > oppCard.rank):
             winner = "me"
             Battle.meQ.append(myCard)
             Battle.meQ.append(oppCard)
-            self.bet(winner)
+            Battle.currentBet, Battle.money = betSys.bet(winner, Battle.money, Battle.currentBet)
             
         if (myCard.rank == oppCard.rank):
             battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle())
-            battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
+            Button.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
             
         else:
             del Battle.me[0]
@@ -362,12 +380,12 @@ class Battle(Frame):
                 winner = "opponent"
                 for item in Battle.megabattle:
                     Battle.oppQ.append(item)
-                self.bet(winner)
+                Battle.currentBet, Battle.money = betSys.bet(winner, Battle.money, Battle.currentBet)
             if (myCard.rank > oppCard.rank):
                 winner = "me"
                 for item in Battle.megabattle:
                     Battle.meQ.append(item)
-                self.bet(winner)
+                Battle.currentBet, Battle.money = betSys.bet(winner, Battle.money, Battle.currentBet)
 
 
             if (myCard.rank == oppCard.rank):
@@ -532,7 +550,21 @@ window.mainloop()
 #           an UpdateButton function to make that process easier later
 #       
 
-
+# Seth: Completed the save function with a save button that works, also cleaned up the betting system so now it displays the players money in real time along with letting the player
+#       get money if they have no money. Additionally, I started the migration of functions to different files.
+#
+#       Me and Carter talked about it a bit and decided that moving fucntions out of the main.py file and into seperate .py files would clean up the code in here and also show better
+#       knowledge of the python language. I have already done so for the save() and bet() functions. The plan is to get all backend functions that don't use GUI into other files. Then
+#       possibly moving those GUI files into other files so the user runs a small run.py file and everyting from the other files come together.
+#
+#       If you noticed I have created multiple buttons for the GUI that are commented out. These are to serve as the customization that we have discussed. The plan is to create a main
+#       screen to play and customize. I have wrote and tested them and they work fine, all that's left is to create the GUI for those screens. Carter told me he can take care of that
+#       since he's the best with GUI.
+#
+#       I'll be continuing to migrate fucntions out of this main file over the next couple days and will note them in the pushes I make to the repository.
+#
+#       EDIT: Just got done migrating when I found a pretty weird one when there is a tie in the game. I didn't notice it while testing before hand and only noticed it after migrating.
+#             which is odd because I didn't remove anything with the GUI while doing so. So check it out and see if you can find out what's wrong.
 
 
 
