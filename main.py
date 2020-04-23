@@ -10,7 +10,6 @@
 ###################################################################################
 
 from Tkinter import *
-from time import sleep
 from random import randint
 
 
@@ -81,9 +80,8 @@ class Battle(Frame):
     def mainScreen(self):
         pass
         
-    def gameScreen(self):
+    def gameScreen(self, winner = None):
         #game screen
-        print Battle.going
         if (Battle.going == None):
             Battle.currentBet = 0
        
@@ -118,6 +116,7 @@ class Battle(Frame):
             
             playerCard = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
             playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+            
             Battle.going = True
             
             i = 0
@@ -149,10 +148,36 @@ class Battle(Frame):
         oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6, ipadx = 20, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.play())
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
         playerDeck.image = img
-        playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)  
-            
+        playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
+
+        if (winner != "tie"):
+            pool = Label(self.master, bg = Battle.bg, font=("Arial", 20), text = "")
+            pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
+
+    def battleScreen(self, myMega, clicks):
+        image = Card.cardBack.split(".")
+        image = image[0] + "_." + image[1]    
+        img = PhotoImage(file = image)
+        pool = Label(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 20), text = len(Battle.megabattle), activebackground=Battle.bg)
+        pool.image = img
+        pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
+
+        oppCard = Label(self.master, bg = Battle.bg, text = "", borderwidth=0)
+        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+        
+        playerCard = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+
+        img = PhotoImage(file = Card.cardBack)
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megabattle2(myMega, clicks))
+        playerDeck.image = img
+        playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
+
+        battleButton = Label(self.master, bg = Battle.bg, text = " ", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
+
             
     def store(self):
         #option to purchase in-game items, decks, backgrounds
@@ -231,25 +256,14 @@ class Battle(Frame):
             Winner = "opponent"
         print "________done________"
         print Winner
+        
     
         
     # a battle function that take in itself and an opposing card and compares to determine the winner
-    def battle(self):
-        if(len(Battle.me) == 0):
-            if (len(Battle.meQ) == 0):
-                self.endGame()
-            else:
-                Battle.me = self.shuffle(Battle.me, Battle.meQ)
-
-        if(len(Battle.opponent) == 0):
-            if (len(Battle.oppQ) == 0):
-                self.endGame()
-            else:
-                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
-                
+    def battle(self, winner = None):                
         myCard = Battle.me[0]
         oppCard = Battle.opponent[0]
-        self.gameScreen()
+        self.gameScreen(winner)
         
         if (myCard.rank < oppCard.rank):
             winner = "opponent"
@@ -263,10 +277,8 @@ class Battle(Frame):
             Battle.meQ.append(oppCard)
             self.bet(winner)
             
-            
         if (myCard.rank == oppCard.rank):
-            megabattle = []
-            battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle(megabattle))
+            battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle())
             battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
             
         else:
@@ -276,16 +288,26 @@ class Battle(Frame):
             print "\t" + str(myCard),
             print "\t" + str(oppCard)
 
-        print len(Battle.me)
-        print len(Battle.opponent)
+        if(len(Battle.me) == 0):
+            if (len(Battle.meQ) == 0):
+                self.endGame()
+            else:
+                Battle.me = self.shuffle(Battle.me, Battle.meQ)
+
+        if(len(Battle.opponent) == 0):
+            if (len(Battle.oppQ) == 0):
+                self.endGame()
+            else:
+                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+
                 
-    def megaBattle(self, megabattle):
-        myCard = Battle.me[0]
-        oppCard = Battle.opponent[0]
+    def megaBattle(self):
+        megabattle = []
+        Battle.megabattle.append(Battle.me[0])
+        Battle.megabattle.append(Battle.opponent[0])
         del Battle.me[0]
         del Battle.opponent[0]
-        megabattle.append(myCard)
-        megabattle.append(oppCard)
+
 
         if (len(Battle.me) < 4):
             Battle.me = self.shuffle(Battle.me, Battle.meQ)
@@ -296,54 +318,75 @@ class Battle(Frame):
     
     #if they still dont have enough, they battle with however many they have
         if (len(Battle.me) < 4):
-            for i in range(len(Battle.me) - 2):
-                megabattle.append(Battle.me[0])
-                del Battle.me[0]
+            mymega = len(Battle.me) -2
         else:
-            for i in range(3):
-                megabattle.append(Battle.me[0])
-                del Battle.me[0]
+            myMega = 3
+            
+        clicks = 0
+        self.battleScreen(myMega, clicks)
 
-        if (len(Battle.opponent) < 4):
-            for i in range(len(Battle.opponent) - 2):
-                megabattle.append(Battle.opponent[0])
-                del Battle.opponent[0]
+
+    def megabattle2(self, myMega, clicks):
+        if (clicks < myMega):
+            clicks += 1
+            Battle.megabattle.append(Battle.me[0])
+            del Battle.me[0]
+            self.battleScreen(myMega, clicks)
         else:
-            for i in range(3):
-                megabattle.append(Battle.opponent[0])
+            clicks += 1
+            if (len(Battle.opponent) < 4):
+                for i in range(len(Battle.opponent) - 2):
+                    Battle.megabattle.append(Battle.opponent[0])
+                    del Battle.opponent[0]
+            else:
+                for i in range(3):
+                    Battle.megabattle.append(Battle.opponent[0])
+                    del Battle.opponent[0]
+
+            self.battleScreen(myMega, clicks)
+            
+        if (clicks == myMega + 1):
+            self.battleScreen(myMega, clicks)
+            
+            myCard = Battle.me[0]
+            oppCard = Battle.opponent[0]
+            Battle.megabattle.append(myCard)
+            Battle.megabattle.append(oppCard)
+                          
+            
+            window.update()
+            print "done"
+                
+
+            if (myCard.rank < oppCard.rank):
+                winner = "opponent"
+                for item in Battle.megabattle:
+                    Battle.oppQ.append(item)
+                self.bet(winner)
+            if (myCard.rank > oppCard.rank):
+                winner = "me"
+                for item in Battle.megabattle:
+                    Battle.meQ.append(item)
+                self.bet(winner)
+
+
+            if (myCard.rank == oppCard.rank):
+                Battle.megabattle.remove(myCard)
+                Battle.megabattle.remove(oppCard)
+                winner = "tie"
+                self.battle(winner)
+                
+            else:
+                self.gameScreen()
+                del Battle.me[0]
                 del Battle.opponent[0]
+                Battle.megabattle = []
 
-        myCard = Battle.me[0]
-        oppCard = Battle.opponent[0]
-        self.gameScreen()
-        megabattle.append(myCard)
-        megabattle.append(oppCard)
-        del Battle.me[0]
-        del Battle.opponent[0]
-        
-        for i in range(len(megabattle)):
-            print "\t",
-            print megabattle[i]
+            print winner
+            print "\t" + str(myCard)
+            print "\t" + str(oppCard)
             
-        if (myCard.rank < oppCard.rank):
-            winner = "opponent"
-            for item in megabattle:
-                Battle.oppQ.append(item)
-            self.bet(winner)
-        if (myCard.rank > oppCard.rank):
-            winner = "me"
-            for item in megabattle:
-                Battle.meQ.append(item)
-            self.bet(winner)
-
-        self.gameScreen()
-        
-        if (myCard.rank == oppCard.rank):
-            battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle(megabattle))
-            battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
             
-        
-        
 
     def createCards(self):
         s2 = Card("Spades", 2, "s2.gif")
@@ -411,7 +454,10 @@ class Battle(Frame):
         playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
         
         oppCard = Label(self.master, bg = Battle.bg, text = "\t\t\t\t\t\t", borderwidth=0)
-        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
+        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)       
+
+
+        Battle.megabattle = []
     
     def shuffleStart(self, deck):
         #starts the game by shuffling and distributing cards
@@ -427,11 +473,7 @@ class Battle(Frame):
             
         return mydeck, oppdeck
 
-    def play(self):
-        if (Battle.going == True):
-            self.battle()
-        else:
-            pass
+
                
 
 #########################################################
