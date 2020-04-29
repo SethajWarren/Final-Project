@@ -13,66 +13,20 @@ from Tkinter import *
 from random import randint
 import save
 import betSys
+import card
 
 
 ######################
 ######## Main ########
 ######################
-
-# a card class that will be used for the actual cards.
-# this will make the interactions with cards a lot cleaner
-# and easier to debug.
-class Card(object):
-    def __init__(self, suit, rank, image):
-        self.suit = suit
-        self.rank = rank
-        self.image = image
-
-    @property
-    def suit(self):
-        return self._suit
-
-    @suit.setter
-    def suit(self, value):
-        self._suit = value
-
-    @property
-    def rank(self):
-        return self._rank
     
-    @rank.setter
-    def rank(self, value):
-        self._rank = value
-
-    @property
-    def image(self):
-        return self._image
-
-    @image.setter
-    def image(self, value):
-        self._image = "Pictures/" + value
-
-    def __str__(self):
-        value = self.rank
-        if (self.rank == 11):
-            value = "Jack"
-        if (self.rank == 12):
-            value = "Queen"
-        if (self.rank == 13):
-            value = "King"
-        if (self.rank == 14):
-            value = "Ace"
-        s = "{} of {}".format(value, self.suit)
-        return s
-    
-
 class Battle(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         
 
     def main(self):
-        Battle.money, Battle.difficulty, Battle.bg, Card.cardBack = save.retrieve()
+        Battle.money, Battle.difficulty, Battle.bg, card.Card.cardBack = save.retrieve()
         #self.mainScreen()
 
         self.createCards()
@@ -113,7 +67,7 @@ class Battle(Frame):
             superBetDown.grid(row=8, column=0, sticky = NSEW)
 
             saveButton = Button(self.master, bg = Battle.bg, text = "Save", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
-                                command = lambda:save.save(Battle.money, Battle.difficulty, Battle.bg, Card.cardBack))
+                                command = lambda:save.save(Battle.money, Battle.difficulty, Battle.bg, card.Card.cardBack))
             saveButton.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
 
             battleButton = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
@@ -150,12 +104,12 @@ class Battle(Frame):
         battleButton = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
 
-        img = PhotoImage(file = Card.cardBack)
+        img = PhotoImage(file = card.Card.cardBack)
         oppDeck = Label(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.opponent) + len(Battle.oppQ)-i),activebackground=Battle.bg)
         oppDeck.image = img
         oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6, ipadx = 20, ipady = 20)
 
-        img = PhotoImage(file = Card.cardBack)
+        img = PhotoImage(file = card.Card.cardBack)
         playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0,\
                             highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
         playerDeck.image = img
@@ -193,7 +147,7 @@ class Battle(Frame):
             pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
 
     def battleScreen(self, myMega, clicks):
-        image = Card.cardBack.split(".")
+        image = card.Card.cardBack.split(".")
         image = image[0] + "_." + image[1]    
         img = PhotoImage(file = image)
         pool = Label(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 20), text = len(Battle.megabattle), activebackground=Battle.bg)
@@ -206,7 +160,7 @@ class Battle(Frame):
         playerCard = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
 
-        img = PhotoImage(file = Card.cardBack)
+        img = PhotoImage(file = card.Card.cardBack)
         playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megabattle2(myMega, clicks))
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
@@ -250,20 +204,7 @@ class Battle(Frame):
         money = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         money.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
 
-            
-    def shuffle(self, Odeck, deck):
-        deck_ = []
-        while (len(Odeck) > 0):
-            deck_.append(Odeck[0])
-            del Odeck[0]
-        while (len(deck) > 0):
-            x = randint(0, len(deck)-1)
-            deck_.append(deck[x])
-            del deck[x]
-        if (len(deck_) == 0):
-            self.endGame()
-            
-        return deck_
+        
 
     def endGame(self):
         Battle.going = False
@@ -310,13 +251,13 @@ class Battle(Frame):
             if (len(Battle.meQ) == 0):
                 self.endGame()
             else:
-                Battle.me = self.shuffle(Battle.me, Battle.meQ)
+                Battle.me = card.shuffle(self, Battle.me, Battle.meQ)
 
         if(len(Battle.opponent) == 0):
             if (len(Battle.oppQ) == 0):
                 self.endGame()
             else:
-                Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+                Battle.opponent = card.shuffle(self, Battle.opponent, Battle.oppQ)
 
                 
     def megaBattle(self):
@@ -328,10 +269,10 @@ class Battle(Frame):
 
 
         if (len(Battle.me) < 4):
-            Battle.me = self.shuffle(Battle.me, Battle.meQ)
+            Battle.me = card.shuffle(self, Battle.me, Battle.meQ)
             print "me shuffled"
         if (len(Battle.opponent) < 4):
-            Battle.opponent = self.shuffle(Battle.opponent, Battle.oppQ)
+            Battle.opponent = card.shuffle(self, Battle.opponent, Battle.oppQ)
             print "opp shuffled"
     
     #if they still dont have enough, they battle with however many they have
@@ -407,61 +348,61 @@ class Battle(Frame):
             
 
     def createCards(self):
-        s2 = Card("Spades", 2, "s2.gif")
-        c2 = Card("Clubs", 2, "c2.gif")
-        d2 = Card("Diamonds", 2,"d2.gif")
-        h2 = Card("Hearts", 2, "h2.gif")
-        s3 = Card("Spades", 3, "s3.gif")
-        c3 = Card("Clubs", 3, "c3.gif")
-        d3 = Card("Diamonds", 3,"d3.gif")
-        h3 = Card("Hearts", 3, "h3.gif")
-        s4 = Card("Spades", 4, "s4.gif")
-        c4 = Card("Clubs", 4, "c4.gif")
-        d4 = Card("Diamonds", 4,"d4.gif")
-        h4 = Card("Hearts", 4, "h4.gif")
-        s5 = Card("Spades", 5, "s5.gif")
-        c5 = Card("Clubs", 5, "c5.gif")
-        d5 = Card("Diamonds", 5,"d5.gif")
-        h5 = Card("Hearts", 5, "h5.gif")
-        s6 = Card("Spades", 6, "s6.gif")
-        c6 = Card("Clubs", 6, "c6.gif")
-        d6 = Card("Diamonds", 6,"d6.gif")
-        h6 = Card("Hearts", 6, "h6.gif")
-        s7 = Card("Spades", 7, "s2.gif")
-        c7 = Card("Clubs", 7, "c7.gif")
-        d7 = Card("Diamonds", 7,"d7.gif")
-        h7 = Card("Hearts", 7, "h7.gif")
-        s8 = Card("Spades", 8, "s8.gif")
-        c8 = Card("Clubs", 8, "c8.gif")
-        d8 = Card("Diamonds", 8,"d8.gif")
-        h8 = Card("Hearts", 8, "h8.gif")
-        s9 = Card("Spades", 9, "s9.gif")
-        c9 = Card("Clubs", 9, "c9.gif")
-        d9 = Card("Diamonds", 9,"d9.gif")
-        h9 = Card("Hearts", 9, "h9.gif")
-        s10 = Card("Spades", 10, "s10.gif")
-        c10 = Card("Clubs", 10, "c10.gif")
-        d10 = Card("Diamonds", 10,"d10.gif")
-        h10 = Card("Hearts", 10, "h10.gif")
-        sJ = Card("Spades", 11, "sJ.gif")
-        cJ = Card("Clubs", 11, "cJ.gif")
-        dJ = Card("Diamonds", 11,"dJ.gif")
-        hJ = Card("Hearts", 11, "hJ.gif")
-        sQ = Card("Spades", 12, "sQ.gif")
-        cQ = Card("Clubs", 12, "cQ.gif")
-        dQ = Card("Diamonds", 12,"dQ.gif")
-        hQ = Card("Hearts", 12, "hQ.gif")
-        sK = Card("Spades", 13, "sK.gif")
-        cK = Card("Clubs", 13, "cK.gif")
-        dK = Card("Diamonds", 13,"dK.gif")
-        hK = Card("Hearts", 13, "hK.gif")
-        sA = Card("Spades", 14, "sA.gif")
-        cA = Card("Clubs", 14, "cA.gif")
-        dA = Card("Diamonds", 14,"dA.gif")
-        hA = Card("Hearts", 14, "hA.gif")
+        s2 = card.Card("Spades", 2, "s2.gif")
+        c2 = card.Card("Clubs", 2, "c2.gif")
+        d2 = card.Card("Diamonds", 2,"d2.gif")
+        h2 = card.Card("Hearts", 2, "h2.gif")
+        s3 = card.Card("Spades", 3, "s3.gif")
+        c3 = card.Card("Clubs", 3, "c3.gif")
+        d3 = card.Card("Diamonds", 3,"d3.gif")
+        h3 = card.Card("Hearts", 3, "h3.gif")
+        s4 = card.Card("Spades", 4, "s4.gif")
+        c4 = card.Card("Clubs", 4, "c4.gif")
+        d4 = card.Card("Diamonds", 4,"d4.gif")
+        h4 = card.Card("Hearts", 4, "h4.gif")
+        s5 = card.Card("Spades", 5, "s5.gif")
+        c5 = card.Card("Clubs", 5, "c5.gif")
+        d5 = card.Card("Diamonds", 5,"d5.gif")
+        h5 = card.Card("Hearts", 5, "h5.gif")
+        s6 = card.Card("Spades", 6, "s6.gif")
+        c6 = card.Card("Clubs", 6, "c6.gif")
+        d6 = card.Card("Diamonds", 6,"d6.gif")
+        h6 = card.Card("Hearts", 6, "h6.gif")
+        s7 = card.Card("Spades", 7, "s2.gif")
+        c7 = card.Card("Clubs", 7, "c7.gif")
+        d7 = card.Card("Diamonds", 7,"d7.gif")
+        h7 = card.Card("Hearts", 7, "h7.gif")
+        s8 = card.Card("Spades", 8, "s8.gif")
+        c8 = card.Card("Clubs", 8, "c8.gif")
+        d8 = card.Card("Diamonds", 8,"d8.gif")
+        h8 = card.Card("Hearts", 8, "h8.gif")
+        s9 = card.Card("Spades", 9, "s9.gif")
+        c9 = card.Card("Clubs", 9, "c9.gif")
+        d9 = card.Card("Diamonds", 9,"d9.gif")
+        h9 = card.Card("Hearts", 9, "h9.gif")
+        s10 = card.Card("Spades", 10, "s10.gif")
+        c10 = card.Card("Clubs", 10, "c10.gif")
+        d10 = card.Card("Diamonds", 10,"d10.gif")
+        h10 = card.Card("Hearts", 10, "h10.gif")
+        sJ = card.Card("Spades", 11, "sJ.gif")
+        cJ = card.Card("Clubs", 11, "cJ.gif")
+        dJ = card.Card("Diamonds", 11,"dJ.gif")
+        hJ = card.Card("Hearts", 11, "hJ.gif")
+        sQ = card.Card("Spades", 12, "sQ.gif")
+        cQ = card.Card("Clubs", 12, "cQ.gif")
+        dQ = card.Card("Diamonds", 12,"dQ.gif")
+        hQ = card.Card("Hearts", 12, "hQ.gif")
+        sK = card.Card("Spades", 13, "sK.gif")
+        cK = card.Card("Clubs", 13, "cK.gif")
+        dK = card.Card("Diamonds", 13,"dK.gif")
+        hK = card.Card("Hearts", 13, "hK.gif")
+        sA = card.Card("Spades", 14, "sA.gif")
+        cA = card.Card("Clubs", 14, "cA.gif")
+        dA = card.Card("Diamonds", 14,"dA.gif")
+        hA = card.Card("Hearts", 14, "hA.gif")
         
         deck = [s2, c2, d2, h2, s3, c3, d3, h3, s4, c4, d4, h4, s5, c5, d5, h5, s6, c6, d6, h6, s7, c7, d7, h7, s8, c8, d8, h8, s9, c9, d9, h9, s10, c10, d10, h10, sJ, cJ, dJ, hJ, sQ, cQ, dQ, hQ, sK, cK, dK, hK, sA, cA, dA, hA]
-        Battle.me, Battle.opponent = self.shuffleStart(deck)
+        Battle.me, Battle.opponent = card.shuffleStart(self, deck)
 
         Battle.meQ = []
         Battle.oppQ = []
@@ -477,23 +418,6 @@ class Battle(Frame):
 
         Battle.megabattle = []
     
-    def shuffleStart(self, deck):
-        #starts the game by shuffling and distributing cards
-        mydeck = []
-        oppdeck = []
-        for i in range(26):
-            x = randint(0, len(deck)-1)
-            mydeck.append(deck[x])
-            del deck[x]
-            y = randint(0, len(deck)-1)
-            oppdeck.append(deck[y])
-            del deck[y]
-            
-        return mydeck, oppdeck
-
-
-               
-
 #########################################################
 WIDTH = 1080
 HEIGHT = 687
