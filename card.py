@@ -57,8 +57,6 @@ def shuffle(self, Odeck, deck):
         x = randint(0, len(deck)-1)
         deck_.append(deck[x])
         del deck[x]
-    if (len(deck_) == 0):
-        self.endGame()
         
     return deck_
 
