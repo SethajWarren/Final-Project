@@ -1,1 +1,1 @@
-100 normal darkolivegreen Pictures/redcard.gif
+darkolivegreen 859 Pictures/bluecard.gif
