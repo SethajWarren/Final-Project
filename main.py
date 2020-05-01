@@ -50,7 +50,7 @@ class Card(object):
 
     @image.setter
     def image(self, value):
-        self._image = value
+        self._image = "Pictures/" + value
 
     def __str__(self):
         value = self.rank
@@ -124,7 +124,6 @@ class Battle(Frame):
 
         img = PhotoImage(file = Card.cardBack)
         oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
-        oppCard.image = img
         oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6)
 
         img = PhotoImage(file = Card.cardBack)
@@ -132,15 +131,39 @@ class Battle(Frame):
         oppDeck.image = img
         oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6)
 
+        # deleted "player/oppCard.image = img" lines because the cardback remained behind the player's card when present
         img = PhotoImage(file = Card.cardBack)
         playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
-        playerCard.image = img
         playerCard.grid(row=7, column=2, sticky=S, rowspan = 6)
 
+        # might need a pressed boolean so the initial gamescreen does not show the first battle's cards
         img = PhotoImage(file = Card.cardBack)
         playerDeck = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness = 0, activebackground=Battle.bg, command=lambda:Battle.play(self))
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, sticky=S, rowspan = 6)
+
+    # update the money part of the GUI
+    def updateCurrentMoney(self):
+        totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
+
+    # update the currentBet of the GUI
+    def updateCurrentBet(self):
+        currentBet = Label(self.master, bg = Battle.bg, text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        currentBet.grid(row=6, column=0, sticky = NSEW)
+
+    # update the players' cards in the GUI
+    def updatePlayers(self, card1, card2):
+        img = PhotoImage(file = card1.image)
+        oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        oppCard.image = img
+        oppCard.grid(row=0, column=2, sticky=NSEW, rowspan = 6)
+
+        img = PhotoImage(file = card2.image)
+        playerCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        playerCard.image = img
+        playerCard.grid(row=7, column=2, sticky=S, rowspan = 6)
+
 
     def store(self):
         #option to purchase in-game items, decks, backgrounds
@@ -187,15 +210,15 @@ class Battle(Frame):
                 
         if (value == "me"):
             Battle.money += Battle.currentBet
+            self.updateCurrentMoney()
 
         elif (value == "opponent"):
             Battle.money -= Battle.currentBet
+            self.updateCurrentMoney()
 
 
         # overwrites the current label in the GUI to display
-        currentBet = Label(self.master, bg = Battle.bg, text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
-        currentBet.grid(row=6, column=0, sticky = NSEW)
-
+        self.updateCurrentBet()
             
     def shuffle(self, Odeck, deck):
         deck_ = []
@@ -228,6 +251,8 @@ class Battle(Frame):
         oppCard = Battle.opponent[0]
         del Battle.me[0]
         del Battle.opponent[0]
+        # displays current my/oppCard
+        self.updatePlayers(oppCard, myCard)
         
         if (myCard.rank < oppCard.rank):
             winner = "opponent"
@@ -302,58 +327,58 @@ class Battle(Frame):
                 
                                 
     def createCards(self):
-        s2 = Card("Spades", 2, "s2.png")
-        c2 = Card("Clubs", 2, "c2.png")
-        d2 = Card("Diamonds", 2,"d2.png")
-        h2 = Card("Hearts", 2, "h2.png")
-        s3 = Card("Spades", 3, "s3.png")
-        c3 = Card("Clubs", 3, "c3.png")
-        d3 = Card("Diamonds", 3,"d3.png")
-        h3 = Card("Hearts", 3, "h3.png")
-        s4 = Card("Spades", 4, "s4.png")
-        c4 = Card("Clubs", 4, "c4.png")
-        d4 = Card("Diamonds", 4,"d4.png")
-        h4 = Card("Hearts", 4, "h4.png")
-        s5 = Card("Spades", 5, "s5.png")
-        c5 = Card("Clubs", 5, "c5.png")
-        d5 = Card("Diamonds", 5,"d5.png")
-        h5 = Card("Hearts", 5, "h5.png")
-        s6 = Card("Spades", 6, "s6.png")
-        c6 = Card("Clubs", 6, "c6.png")
-        d6 = Card("Diamonds", 6,"d6.png")
-        h6 = Card("Hearts", 6, "h6.png")
-        s7 = Card("Spades", 7, "s2.png")
-        c7 = Card("Clubs", 7, "c7.png")
-        d7 = Card("Diamonds", 7,"d7.png")
-        h7 = Card("Hearts", 7, "h7.png")
-        s8 = Card("Spades", 8, "s8.png")
-        c8 = Card("Clubs", 8, "c8.png")
-        d8 = Card("Diamonds", 8,"d8.png")
-        h8 = Card("Hearts", 8, "h8.png")
-        s9 = Card("Spades", 9, "s9.png")
-        c9 = Card("Clubs", 9, "c9.png")
-        d9 = Card("Diamonds", 9,"d9.png")
-        h9 = Card("Hearts", 9, "h9.png")
-        s10 = Card("Spades", 10, "s10.png")
-        c10 = Card("Clubs", 10, "c10.png")
-        d10 = Card("Diamonds", 10,"d10.png")
-        h10 = Card("Hearts", 10, "h10.png")
-        sJ = Card("Spades", 11, "sJ.png")
-        cJ = Card("Clubs", 11, "cJ.png")
-        dJ = Card("Diamonds", 11,"dJ.png")
-        hJ = Card("Hearts", 11, "hJ.png")
-        sQ = Card("Spades", 12, "sQ.png")
-        cQ = Card("Clubs", 12, "cQ.png")
-        dQ = Card("Diamonds", 12,"dQ.png")
-        hQ = Card("Hearts", 12, "hQ.png")
-        sK = Card("Spades", 13, "sK.png")
-        cK = Card("Clubs", 13, "cK.png")
-        dK = Card("Diamonds", 13,"dK.png")
-        hK = Card("Hearts", 13, "hK.png")
-        sA = Card("Spades", 14, "sA.png")
-        cA = Card("Clubs", 14, "cA.png")
-        dA = Card("Diamonds", 14,"dA.png")
-        hA = Card("Hearts", 14, "hA.png")
+        s2 = Card("Spades", 2, "s2.gif")
+        c2 = Card("Clubs", 2, "c2.gif")
+        d2 = Card("Diamonds", 2,"d2.gif")
+        h2 = Card("Hearts", 2, "h2.gif")
+        s3 = Card("Spades", 3, "s3.gif")
+        c3 = Card("Clubs", 3, "c3.gif")
+        d3 = Card("Diamonds", 3,"d3.gif")
+        h3 = Card("Hearts", 3, "h3.gif")
+        s4 = Card("Spades", 4, "s4.gif")
+        c4 = Card("Clubs", 4, "c4.gif")
+        d4 = Card("Diamonds", 4,"d4.gif")
+        h4 = Card("Hearts", 4, "h4.gif")
+        s5 = Card("Spades", 5, "s5.gif")
+        c5 = Card("Clubs", 5, "c5.gif")
+        d5 = Card("Diamonds", 5,"d5.gif")
+        h5 = Card("Hearts", 5, "h5.gif")
+        s6 = Card("Spades", 6, "s6.gif")
+        c6 = Card("Clubs", 6, "c6.gif")
+        d6 = Card("Diamonds", 6,"d6.gif")
+        h6 = Card("Hearts", 6, "h6.gif")
+        s7 = Card("Spades", 7, "s2.gif")
+        c7 = Card("Clubs", 7, "c7.gif")
+        d7 = Card("Diamonds", 7,"d7.gif")
+        h7 = Card("Hearts", 7, "h7.gif")
+        s8 = Card("Spades", 8, "s8.gif")
+        c8 = Card("Clubs", 8, "c8.gif")
+        d8 = Card("Diamonds", 8,"d8.gif")
+        h8 = Card("Hearts", 8, "h8.gif")
+        s9 = Card("Spades", 9, "s9.gif")
+        c9 = Card("Clubs", 9, "c9.gif")
+        d9 = Card("Diamonds", 9,"d9.gif")
+        h9 = Card("Hearts", 9, "h9.gif")
+        s10 = Card("Spades", 10, "s10.gif")
+        c10 = Card("Clubs", 10, "c10.gif")
+        d10 = Card("Diamonds", 10,"d10.gif")
+        h10 = Card("Hearts", 10, "h10.gif")
+        sJ = Card("Spades", 11, "sJ.gif")
+        cJ = Card("Clubs", 11, "cJ.gif")
+        dJ = Card("Diamonds", 11,"dJ.gif")
+        hJ = Card("Hearts", 11, "hJ.gif")
+        sQ = Card("Spades", 12, "sQ.gif")
+        cQ = Card("Clubs", 12, "cQ.gif")
+        dQ = Card("Diamonds", 12,"dQ.gif")
+        hQ = Card("Hearts", 12, "hQ.gif")
+        sK = Card("Spades", 13, "sK.gif")
+        cK = Card("Clubs", 13, "cK.gif")
+        dK = Card("Diamonds", 13,"dK.gif")
+        hK = Card("Hearts", 13, "hK.gif")
+        sA = Card("Spades", 14, "sA.gif")
+        cA = Card("Clubs", 14, "cA.gif")
+        dA = Card("Diamonds", 14,"dA.gif")
+        hA = Card("Hearts", 14, "hA.gif")
         
         deck = [s2, c2, d2, h2, s3, c3, d3, h3, s4, c4, d4, h4, s5, c5, d5, h5, s6, c6, d6, h6, s7, c7, d7, h7, s8, c8, d8, h8, s9, c9, d9, h9, s10, c10, d10, h10, sJ, cJ, dJ, hJ, sQ, cQ, dQ, hQ, sK, cK, dK, hK, sA, cA, dA, hA]
         Battle.me, Battle.opponent = self.shuffleStart(deck)
@@ -455,6 +480,12 @@ window.mainloop()
 #           the (bet) buttons also had their borderwidth changed to account for more button-like looks
 #           though they are quite large; I am considering making
 #           an UpdateButton function to make that process easier later
+
+# Timothy: made functions to update the GUI with new money and card appearances after each battle
+#           Upon running battle, the player's and opponent's cards appear face up;
+#           the size is a fraction of the cardback's;
+#           However, the updateMoney function does not work after battles for some reason (it does
+#            update with changing the bet if you alter the value it should state and when it runs)
 #       
 
 
