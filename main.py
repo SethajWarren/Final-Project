@@ -119,8 +119,6 @@ class Battle(Frame):
 
             if (myCard.rank > oppCard.rank):
                 winner = "me"
-                Battle.money += 1
-                print Battle.money
                 Battle.meQ.append(myCard)
                 Battle.meQ.append(oppCard)
             
@@ -129,7 +127,7 @@ class Battle(Frame):
                 battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle())
                 battleButton.grid(row = 6, column = 2, sticky = NSEW, columnspan = 2)
             else:
-                Battle.currentbet, Battle.money = bet(winner, Battle.money, Battle.currentBet)
+                self.bet(winner, Battle.money, Battle.currentBet)
                                           
                 del Battle.me[0]
                 del Battle.opponent[0]
@@ -200,7 +198,6 @@ class Battle(Frame):
                 winner = "me"
                 for item in Battle.megabattle:
                     Battle.meQ.append(item)
-                Battle.money += 1
                 
 
             if (myCard.rank == oppCard.rank):
@@ -209,7 +206,7 @@ class Battle(Frame):
                 winner = "tie"
                 self.battle(winner)
             else:
-                Battle.currentBet, Battle.money = bet(winner, Battle.money, Battle.currentBet)
+                self.bet(winner, Battle.money, Battle.currentBet)
                 self.gameScreen()
                 del Battle.me[0]
                 del Battle.opponent[0]
@@ -512,7 +509,7 @@ class Battle(Frame):
                          command = lambda:self.select("card", "bluecard.gif"))
 
 
-        bgs = {"grey": grey,"brown": brown, "blue": blue, "green": green, "red": red, "purple": purple}
+        bgs = {"slategrey": grey,"sienna4": brown, "dodgerblue4": blue, "darkolivegreen": green, "red4": red, "purple4": purple}
         cbs = {"bluecard.gif": blueCard, "redcard.gif": redCard}
 
         b = 0
