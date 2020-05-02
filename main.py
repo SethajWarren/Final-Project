@@ -102,6 +102,7 @@ class Battle(Frame):
                         #####################  GAME  #####################
         
     def battle(self, winner = None):
+        print "hi"
         try:
             if(len(Battle.me) == 0):
                 Battle.me = shuffle(self, Battle.me, Battle.meQ)
@@ -112,7 +113,9 @@ class Battle(Frame):
             myCard = Battle.me[0]
             oppCard = Battle.opponent[0]
             self.gameScreen(winner)
-            
+
+            print myCard.rank
+            print oppCard.rank
             if (myCard.rank < oppCard.rank):
                 winner = "opponent"
                 Battle.oppQ.append(myCard)
@@ -125,7 +128,7 @@ class Battle(Frame):
             
             if (myCard.rank == oppCard.rank):
                 self.gameScreen("tie")
-                battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle())
+                battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle())
                 battleButton.grid(row = 6, column = 2, sticky = NSEW, columnspan = 2)
             else:
                 self.bet(winner, Battle.money, Battle.currentBet)
@@ -135,8 +138,9 @@ class Battle(Frame):
                 print winner
                 print "\t" + str(myCard),
                 print "\t" + str(oppCard)
-                
+                    
         except:
+            print "bye"
             self.endGame()
                 
     def megaBattle(self):
@@ -222,7 +226,7 @@ class Battle(Frame):
         Battle.currentBet, Battle.money = bet(value, money, currentBet)
 
         # overwrites the current label in the GUI to display the players bet
-        currentBet = Label(self.master, bg = Battle.bg, text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        currentBet = Label(self.master, bg = Battle.bg, font = ("Arial", 20), text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
         # overwrites the current label in the GUI to display the players currency
@@ -314,10 +318,10 @@ class Battle(Frame):
         totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
 
-        currentBet = Label(self.master, bg = Battle.bg,font=("Arial", 10), text = "+" + str(Battle.currentBet), activebackground=Battle.bg)
+        currentBet = Label(self.master, bg = Battle.bg,font=("Arial", 20), text = "+" + str(Battle.currentBet), activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
-        battleButton = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        battleButton = Label(self.master, bg = Battle.bg, text = " ", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
 
         img = PhotoImage(file = Card.cardBack)
@@ -335,7 +339,7 @@ class Battle(Frame):
             pool = Label(self.master, bg = Battle.bg, text = "\t\t\t\t")
             pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
 
-        widgets = [playerDeck, oppDeck, playerCard, oppCard, battleButton, text, superBetDown, betDown, betUp, supBetUp]
+        widgets = [playerDeck, oppDeck, playerCard, oppCard, battleButton]
 
     def battleScreen(self, myMega, clicks):
 
