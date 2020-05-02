@@ -30,6 +30,7 @@ class Battle(Frame):
                         ##################### SETUP  #####################
     def createCards(self):
         Battle.money = 10
+        
         s2 = Card("Spades", 2, "s2.gif")
         c2 = Card("Clubs", 2, "c2.gif")
         d2 = Card("Diamonds", 2,"d2.gif")
@@ -331,7 +332,7 @@ class Battle(Frame):
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
 
         if (winner != "tie"):
-            pool = Label(self.master, bg = Battle.bg, text = "\t\t")
+            pool = Label(self.master, bg = Battle.bg, text = "\t\t\t\t")
             pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
 
         widgets = [playerDeck, oppDeck, playerCard, oppCard, battleButton, text, superBetDown, betDown, betUp, supBetUp]
@@ -368,6 +369,18 @@ class Battle(Frame):
         totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
 
+        widgets = [pool, oppCard, playerCard, playerDeck, battleButton, totalMoney]
+
+
+
+    def endGameScreen(self, endText):
+        gameover = Label(self.master, bg = Battle.bg, text = endText, font=("Arial", 50), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        gameover.grid(row=0, column=0, sticky=NSEW, rowspan = 13, columnspan = 4, ipadx = 20, ipady = 20)
+
+        leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:changeScreen(widgets, "mainScreen"))
+        leave.grid(row=7, column=1, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
+
+        widgets = [gameover, leave]
 
 
 ##################################################################################################
@@ -394,13 +407,13 @@ class Battle(Frame):
         rightSpace = Label(self.master, text = "\t\t", borderwidth=0, font=("Arial", 30), highlightthickness=0, background = Battle.bg)
         rightSpace.grid(row=1, column=2, sticky=NSEW, rowspan = 12, ipadx = 20, ipady = 20)
 
-        play = Button(self.master, text = "Play", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.newScreen("gameScreen"))
+        play = Button(self.master, text = "Play", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen(widgets, "gameScreen"))
         play.grid(row=4, column=1, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
-        options = Button(self.master, text = "Options", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.newScreen("optionsScreen"))
+        options = Button(self.master, text = "Options", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen(widgets, "optionsScreen"))
         options.grid(row=5, column=1, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
-        store = Button(self.master, text = "Store", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.newScreen("storeScreen"))
+        store = Button(self.master, text = "Store", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen(widgets, "storeScreen"))
         store.grid(row=6, column=1, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
         leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:quit(0))
@@ -409,6 +422,7 @@ class Battle(Frame):
         money = Label(self.master, text = Battle.ownedMoney, font=("Arial", 20), borderwidth=0, highlightthickness=0, justify = "right",background = Battle.bg)
         money.grid(row=0, column = 2, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
+        widgets = [leftSpace, topSpace, botSpace, rightSpace, play, options, store, leave, money]
         
                     
     def storeScreen(self):
@@ -452,6 +466,11 @@ class Battle(Frame):
             if cbs[item] not in Battle.unlocks:
                 cbs[item].grid(row=c, column=2, sticky = NSEW)
                 c += 1
+
+        leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, padx = 50, command = lambda:self.changeScreen(widgets, "mainScreen"))
+        leave.grid(row=6, column=1, sticky=NSEW, rowspan = 1, columnspan = 2, ipadx = 20, ipady = 20)
+
+        widgets = [grey, brown, blue, red, purple, redCard, leave]
                 
     def purchase(self, item, value):
         if (item == "card"):
@@ -469,8 +488,19 @@ class Battle(Frame):
             print "you need more money"
             
             
-        
-
+    def changeScreen(self, widgets, newScreen):
+        while (len(widgets) > 0):
+            widgets[0].destroy()
+            del widgets[0]
+            
+        if (newScreen == "mainScreen"):
+            self.mainScreen()
+        if (newScreen == "gameScreen"):
+            self.gameScreen()
+        if (newScreen == "optionsScreen"):
+            self.optionsScreen()
+        if (newScreen == "storeScreen"):
+            self.storeScreen()
             
 
     def optionsScreen(self):        
@@ -512,7 +542,7 @@ class Battle(Frame):
 
         b = 0
         c = 0
-
+        
         for item in Battle.unlocks:
             if item in bgs:
                 bgs[item].grid(row=b, column=1, sticky = NSEW)
@@ -522,10 +552,11 @@ class Battle(Frame):
                 c+= 1
 
 
-        leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, padx = 50, command = lambda:self.mainScreen())
+        leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, padx = 50, command = lambda:self.changeScreen(widgets, "mainScreen"))
         leave.grid(row=6, column=1, sticky=NSEW, rowspan = 1, columnspan = 2, ipadx = 20, ipady = 20)
 
-
+        widgets = [grey, blue, green, red, purple, redCard, blueCard, leave]
+        
                         #####################  CODE   #####################
 
     def select(self, item, value):
