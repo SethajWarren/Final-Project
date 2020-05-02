@@ -334,6 +334,10 @@ class Battle(Frame):
             pool = Label(self.master, bg = Battle.bg, text = "\t\t")
             pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
 
+        widgets = []
+        for item in g.grid_slaves():
+            widgets.append(item)
+            
     def battleScreen(self, myMega, clicks):
 
         if(Card.cardBack == "blackcard.gif"):
@@ -366,7 +370,20 @@ class Battle(Frame):
         totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
         totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
 
+        widgets = []
+        for item in g.grid_slaves():
+            widgets.append(item)
 
+
+
+    def endGameScreen(self):
+        gameover = Label(self.master, bg = Battle.bg, text = endText, font=("Arial", 50), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        gameover.grid(row=0, column=0, sticky=NSEW, rowspan = 13, columnspan = 4, ipadx = 20, ipady = 20)
+
+        widgets = []
+        for item in g.grid_slaves():
+            widgets.append(item)
+        
 
 ##################################################################################################
 #############################################  MAIN  #############################################
@@ -407,6 +424,10 @@ class Battle(Frame):
         money = Label(self.master, text = Battle.ownedMoney, font=("Arial", 20), borderwidth=0, highlightthickness=0, justify = "right",background = Battle.bg)
         money.grid(row=0, column = 2, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
+        widgets = []
+        for item in g.grid_slaves():
+            widgets.append(item)
+        
         
                     
     def storeScreen(self):
@@ -450,6 +471,10 @@ class Battle(Frame):
             if cbs[item] not in Battle.unlocks:
                 cbs[item].grid(row=c, column=2, sticky = NSEW)
                 c += 1
+
+        widgets = []
+        for item in g.grid_slaves():
+            widgets.append(item)
                 
     def purchase(self, item, value):
         if (item == "card"):
@@ -467,8 +492,13 @@ class Battle(Frame):
             print "you need more money"
             
             
-        
-
+    def changeScreen(self, widgets, newScreen):
+        while (len(widgets) > 0):
+            widgets[0].destroy()
+            widgets[0].remove()
+            
+        self.newScreen()
+            
             
 
     def optionsScreen(self):        
@@ -523,7 +553,10 @@ class Battle(Frame):
         leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, padx = 50, command = lambda:self.mainScreen())
         leave.grid(row=6, column=1, sticky=NSEW, rowspan = 1, columnspan = 2, ipadx = 20, ipady = 20)
 
-
+        widgets = []
+        for item in g.grid_slaves():
+            widgets.append(item)
+            
                         #####################  CODE   #####################
 
     def select(self, item, value):
@@ -537,9 +570,6 @@ class Battle(Frame):
         save(Battle.bg, Battle.ownedMoney, Card.cardBack, Battle.unlocks)
         self.optionsScreen()
 
-        
-
-    
 #########################################################
 WIDTH = 1080
 HEIGHT = 720
