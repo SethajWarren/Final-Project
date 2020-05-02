@@ -239,9 +239,6 @@ class Battle(Frame):
             endText = "Aw, too Bad...\nBetter Luck Next Time"
             
         save(Battle.bg, Battle.ownedMoney, Card.cardBack, Battle.unlocks)
-        
-        gameover = Label(self.master, bg = Battle.bg, text = endText, font=("Arial", 50), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
-        gameover.grid(row=0, column=0, sticky=NSEW, rowspan = 13, columnspan = 4, ipadx = 20, ipady = 20)
 
 
                         ##################### SCREENS #####################
@@ -378,7 +375,6 @@ class Battle(Frame):
                         ##################### SCREENS #####################
 
     def mainScreen(self):
-        self.destroy()
         
         Battle.going = None
         
@@ -396,13 +392,13 @@ class Battle(Frame):
         rightSpace = Label(self.master, text = "\t\t", borderwidth=0, font=("Arial", 30), highlightthickness=0, background = Battle.bg)
         rightSpace.grid(row=1, column=2, sticky=NSEW, rowspan = 12, ipadx = 20, ipady = 20)
 
-        play = Button(self.master, text = "Play", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.gameScreen())
+        play = Button(self.master, text = "Play", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.newScreen("gameScreen"))
         play.grid(row=4, column=1, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
-        options = Button(self.master, text = "Options", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.optionsScreen())
+        options = Button(self.master, text = "Options", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.newScreen("optionsScreen"))
         options.grid(row=5, column=1, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
-        store = Button(self.master, text = "Store", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.storeScreen())
+        store = Button(self.master, text = "Store", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.newScreen("storeScreen"))
         store.grid(row=6, column=1, sticky=NSEW, rowspan = 1, ipadx = 20, ipady = 20)
 
         leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:quit(0))
