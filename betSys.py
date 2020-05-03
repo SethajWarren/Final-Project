@@ -23,10 +23,13 @@ def bet(value, money, currentBet):
 
     if (bet < 0):
             bet -= bet
+
+    if (currentBet > money):
+        currentBet = money
                 
     if (value == "me"):
         money += currentBet
-        if (money  == 0):
+        if (currentBet == 0):
             money += 10
 
     elif (value == "opponent"):
