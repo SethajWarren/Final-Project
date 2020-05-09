@@ -117,12 +117,22 @@ class Battle(Frame):
                 Battle.oppQ.append(myCard)
                 Battle.oppQ.append(oppCard)
                 Battle.loss += 1
+                if (len(Battle.history) < 3):
+                    Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Loss)")
+                else:
+                    del Battle.history[0]
+                    Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Loss)")
 
             if (myCard.rank > oppCard.rank):
                 winner = "me"
                 Battle.meQ.append(myCard)
                 Battle.meQ.append(oppCard)
                 Battle.wins += 1
+                if (len(Battle.history) < 3):
+                    Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Win)")
+                else:
+                    del Battle.history[0]
+                    Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Win)")
             
             if (myCard.rank == oppCard.rank):
                 self.gameScreen("update")
@@ -139,6 +149,7 @@ class Battle(Frame):
                 print "\t" + str(oppCard)
                 print Battle.wins
                 print Battle.loss
+                print Battle.history
                     
         except:
             Battle.going = False
@@ -202,12 +213,23 @@ class Battle(Frame):
                     for item in Battle.megabattle:
                         Battle.oppQ.append(item)
                     Battle.wins += 1
+                    if (len(Battle.history) < 3):
+                        Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Win)")
+                    else:
+                        del Battle.history[0]
+                        Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Win)")
+                    
                     
                 if (myCard.rank > oppCard.rank):
                     winner = "me"
                     for item in Battle.megabattle:
                         Battle.meQ.append(item)
                     Battle.wins += 1
+                    if (len(Battle.history) < 3):
+                        Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Win)")
+                    else:
+                        del Battle.history[0]
+                        Battle.history.append(str(myCard) + " vs. " + str(oppCard) + "\n(Win)")
                     
 
                 if (myCard.rank == oppCard.rank):
@@ -262,7 +284,10 @@ class Battle(Frame):
         gameover = Label(self.master, bg = Battle.bg, text = endText, font=("Arial", 50), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         gameover.grid(row=0, column=0, sticky=NSEW, ipadx = 20, ipady = 20)
 
-        leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen("mainScreen"))
+        stats = Label(self.master, bg = Battle.bg, text = endText, font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+
+        leave = Button(self.master, text = "Wins: {}\n\nLosses: {}\n\nWin/Loss: {}".format(Battle.wins, Battle.loss, self.stats(Battle.wins,Battle.loss)), justify = LEFT,\
+                       borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen("mainScreen"))
         leave.grid(row=1, column=0, sticky=NSEW, ipadx = 20, ipady = 20)
 
         Battle.widgets = [gameover, leave]
@@ -285,6 +310,8 @@ class Battle(Frame):
         if (Battle.going == None):
             
             self.createCards()
+
+            Battle.history = ["","",""]
 
             Battle.wins = 0
             Battle.loss = 0
@@ -327,11 +354,11 @@ class Battle(Frame):
             playerCard = Label(self.master, bg = Battle.bg, text = "\t\t\t\t\t", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
             playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 35, ipady = 20)
 
-            pool = Label(self.master, bg = Battle.bg, text = "\t\t\t\t")
+            pool = Label(self.master, bg = Battle.bg, text = "\t\t\t")
             pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
 
             leave = Button(self.master, bg = Battle.bg, text = "Quit", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.changeScreen("mainScreen"))
-            leave.grid(row = 12, column = 4, sticky = NSEW, columnspan = 2, ipadx = 64)
+            leave.grid(row = 12, column = 4, sticky = NSEW, columnspan = 2, ipadx = 96)
 
             currentBet = Label(self.master, bg = Battle.bg,font=("Arial", 20), text = "+" + str(Battle.currentBet), activebackground=Battle.bg)
             currentBet.grid(row=6, column=0, sticky = NSEW)
@@ -387,7 +414,7 @@ class Battle(Frame):
                       font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         stats.grid(row=0, column = 4, sticky = NSEW, columnspan = 2, rowspan = 6)
 
-        history = Label(self.master, bg = Battle.bg, text = " vs. ", font = ("Arial", 10), borderwidth = 0, highlightthickness = 0, activebackground = Battle.bg)
+        history = Label(self.master, bg = Battle.bg, text = Battle.history[0] + "\n\n"+Battle.history[1] + "\n\n"+Battle.history[2], justify = LEFT, font = ("Arial", 10), borderwidth = 0, highlightthickness = 0, activebackground = Battle.bg)
         history.grid(row=6, column = 4, sticky = NSEW, columnspan = 2, rowspan = 6)
 
         
