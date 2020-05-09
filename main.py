@@ -94,9 +94,6 @@ class Battle(Frame):
 
         Battle.megabattle = []
 
-        Battle.me = [h4]
-        Battle.opponent = [s2]
-
 
                         #####################  GAME  #####################
         
