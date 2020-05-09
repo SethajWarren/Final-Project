@@ -107,6 +107,7 @@ class Battle(Frame):
                     
             myCard = Battle.me[0]
             oppCard = Battle.opponent[0]
+            
             self.gameScreen("update")
 
             print myCard.rank
@@ -115,11 +116,13 @@ class Battle(Frame):
                 winner = "opponent"
                 Battle.oppQ.append(myCard)
                 Battle.oppQ.append(oppCard)
+                Battle.loss += 1
 
             if (myCard.rank > oppCard.rank):
                 winner = "me"
                 Battle.meQ.append(myCard)
                 Battle.meQ.append(oppCard)
+                Battle.wins += 1
             
             if (myCard.rank == oppCard.rank):
                 self.gameScreen("update")
@@ -134,6 +137,8 @@ class Battle(Frame):
                 print winner
                 print "\t" + str(myCard),
                 print "\t" + str(oppCard)
+                print Battle.wins
+                print Battle.loss
                     
         except:
             Battle.going = False
@@ -196,11 +201,13 @@ class Battle(Frame):
                     winner = "opponent"
                     for item in Battle.megabattle:
                         Battle.oppQ.append(item)
+                    Battle.wins += 1
                     
                 if (myCard.rank > oppCard.rank):
                     winner = "me"
                     for item in Battle.megabattle:
                         Battle.meQ.append(item)
+                    Battle.wins += 1
                     
 
                 if (myCard.rank == oppCard.rank):
@@ -278,6 +285,9 @@ class Battle(Frame):
         if (Battle.going == None):
             
             self.createCards()
+
+            Battle.wins = 0
+            Battle.loss = 0
             
             Battle.currentBet = 0
 
@@ -373,8 +383,15 @@ class Battle(Frame):
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 35, ipady = 20)
 
+        stats = Label(self.master, bg = Battle.bg, text = "Wins:" + str(Battle.wins) + "\n\n Losses:" + str(Battle.loss) + "\n\nW/L:" + str(self.stats(Battle.wins, Battle.loss)), \
+                      font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        stats.grid(row=0, column = 4, sticky = NSEW, columnspan = 2, rowspan = 6)
+
+        history = Label(self.master, bg = Battle.bg, text = " vs. ", font = ("Arial", 10), borderwidth = 0, highlightthickness = 0, activebackground = Battle.bg)
+        history.grid(row=6, column = 4, sticky = NSEW, columnspan = 2, rowspan = 6)
+
         
-        widgets = [oppDeck, playerDeck]
+        widgets = [oppDeck, playerDeck, stats, history]
 
 
         for item in widgets:
@@ -705,6 +722,18 @@ class Battle(Frame):
             self.changeScreen("optionsScreen")
         if (update == "store"):
             self.changeScreen("storeScreen")
+
+    def stats(self, wins, loss):
+
+        try:
+            winLoss = (float(wins)/float(loss))
+
+        except:
+            winLoss = float(0)
+
+        winLoss = round(winLoss, 2)
+
+        return winLoss
 
         
 

@@ -1,2 +1,2 @@
-darkolivegreen 99955910 Pictures/bluecard.gif
-darkolivegreen bluecard.gif 
+darkolivegreen 99953330 Pictures/blackcard.gif
+darkolivegreen bluecard.gif blackcard.gif 
