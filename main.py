@@ -94,6 +94,9 @@ class Battle(Frame):
 
         Battle.megabattle = []
 
+        Battle.me = [h4]
+        Battle.opponent = [s2]
+
 
                         #####################  GAME  #####################
         
@@ -284,13 +287,14 @@ class Battle(Frame):
         gameover = Label(self.master, bg = Battle.bg, text = endText, font=("Arial", 50), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         gameover.grid(row=0, column=0, sticky=NSEW, ipadx = 20, ipady = 20)
 
-        stats = Label(self.master, bg = Battle.bg, text = endText, font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        stats = Label(self.master, bg = Battle.bg, text = "Wins: {}\n\nLosses: {}\n\nWin/Loss: {}".format(Battle.wins, Battle.loss, self.stats(Battle.wins,Battle.loss)), justify = LEFT,\
+                      font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
+        stats.grid(row=1, column = 0, sticky=NSEW, ipadx = 20, ipady = 20)
 
-        leave = Button(self.master, text = "Wins: {}\n\nLosses: {}\n\nWin/Loss: {}".format(Battle.wins, Battle.loss, self.stats(Battle.wins,Battle.loss)), justify = LEFT,\
-                       borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen("mainScreen"))
-        leave.grid(row=1, column=0, sticky=NSEW, ipadx = 20, ipady = 20)
+        leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen("mainScreen"))
+        leave.grid(row=2, column=0, sticky=NSEW, ipadx = 20, ipady = 20)
 
-        Battle.widgets = [gameover, leave]
+        Battle.widgets = [gameover, leave, stats]
 
 
                         ##################### SCREENS #####################
