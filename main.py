@@ -94,53 +94,50 @@ class Battle(Frame):
 
         Battle.megabattle = []
 
-        Battle.me = [sA]
-        Battle.opponent = [s2]
-
 
                         #####################  GAME  #####################
         
     def battle(self, winner = None):
-        try:
-            if(len(Battle.me) == 0):
-                Battle.me = shuffle(self, Battle.me, Battle.meQ)
+##        try:
+        if(len(Battle.me) == 0):
+            Battle.me = shuffle(self, Battle.me, Battle.meQ)
 
-            if(len(Battle.opponent) == 0):
-                Battle.opponent = shuffle(self, Battle.opponent, Battle.oppQ)
-                    
-            myCard = Battle.me[0]
-            oppCard = Battle.opponent[0]
+        if(len(Battle.opponent) == 0):
+            Battle.opponent = shuffle(self, Battle.opponent, Battle.oppQ)
+                
+        myCard = Battle.me[0]
+        oppCard = Battle.opponent[0]
+        self.gameScreen("update")
+
+        print myCard.rank
+        print oppCard.rank
+        if (myCard.rank < oppCard.rank):
+            winner = "opponent"
+            Battle.oppQ.append(myCard)
+            Battle.oppQ.append(oppCard)
+
+        if (myCard.rank > oppCard.rank):
+            winner = "me"
+            Battle.meQ.append(myCard)
+            Battle.meQ.append(oppCard)
+        
+        if (myCard.rank == oppCard.rank):
             self.gameScreen("update")
-
-            print myCard.rank
-            print oppCard.rank
-            if (myCard.rank < oppCard.rank):
-                winner = "opponent"
-                Battle.oppQ.append(myCard)
-                Battle.oppQ.append(oppCard)
-
-            if (myCard.rank > oppCard.rank):
-                winner = "me"
-                Battle.meQ.append(myCard)
-                Battle.meQ.append(oppCard)
-            
-            if (myCard.rank == oppCard.rank):
-                self.gameScreen("update")
-                battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle())
-                battleButton.grid(row = 6, column = 2, sticky = NSEW, columnspan = 2)
-                Battle.widgets.append(battleButton)
-            else:
-                self.bet(winner, Battle.money, Battle.currentBet)
-                                          
-                del Battle.me[0]
-                del Battle.opponent[0]
-                print winner
-                print "\t" + str(myCard),
-                print "\t" + str(oppCard)
-                    
-        except:
-            Battle.going = False
-            self.gameScreen("update")
+            battleButton = Button(self.master, bg = Battle.bg, text = "BATTLE", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megaBattle())
+            battleButton.grid(row = 6, column = 2, sticky = NSEW, columnspan = 2)
+            Battle.widgets.append(battleButton)
+        else:
+            self.bet(winner, Battle.money, Battle.currentBet)
+                                      
+            del Battle.me[0]
+            del Battle.opponent[0]
+            print winner
+            print "\t" + str(myCard),
+            print "\t" + str(oppCard)
+                
+##        except:
+##            Battle.going = False
+##            self.gameScreen("update")
                 
     def megaBattle(self):
         megabattle = []
@@ -228,12 +225,14 @@ class Battle(Frame):
         currentBet = Label(self.master, bg = Battle.bg, font = ("Arial", 20), text = "+" + str(Battle.currentBet), borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         currentBet.grid(row=6, column=0, sticky = NSEW)
 
-        # overwrites the current label in the GUI to display the players currency
-        money = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-        money.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
+        
+            # overwrites the current label in the GUI to display the players currency
+        moneyL = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+        moneyL.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
+        
 
         Battle.widgets.append(currentBet)
-        Battle.widgets.append(money)
+        
 
     def endGameScreen(self):
         Battle.going = False
@@ -258,9 +257,14 @@ class Battle(Frame):
 
                         ##################### SCREENS #####################
         
-    def gameScreen(self, update = ""):
+    def gameScreen(self, update = "", winner = ""):
+        print Battle.widgets
+        if (update == "update"):
+            while (len(Battle.widgets) > 0):
+                Battle.widgets[0].destroy()
+                del Battle.widgets[0]
                     
-        if(Card.cardBack == "blackcard.gif"):
+        if(Card.cardBack == "Pictures/blackcard.gif"):
             textcolor = "white"
         else:
             textcolor = "black"
@@ -298,7 +302,7 @@ class Battle(Frame):
             text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
             text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
 
-            battleButton = Label(self.master, bg = Battle.bg, text = " ", borderwidth=0, highlightthickness=0, pady = 10, activebackground=Battle.bg, padx = 50)
+            battleButton = Label(self.master, bg = Battle.bg, text = " ", font = ("Arial", 20), borderwidth=0, highlightthickness=0, pady = 10, activebackground=Battle.bg, padx = 50)
             battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
             
             oppCard = Label(self.master, bg = Battle.bg, text = "\t\t\t", borderwidth=0)
@@ -306,44 +310,31 @@ class Battle(Frame):
             
             playerCard = Label(self.master, bg = Battle.bg, text = "\t\t\t", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
             playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 100, ipady = 20)
+
+            pool = Label(self.master, bg = Battle.bg, text = "\t\t\t\t")
+            pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
+
+            leave = Button(self.master, bg = Battle.bg, text = "Quit", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.changeScreen("mainScreen"))
+            leave.grid(row = 12, column = 4, sticky = NSEW, columnspan = 2, ipadx = 64)
+
+            currentBet = Label(self.master, bg = Battle.bg,font=("Arial", 20), text = "+" + str(Battle.currentBet), activebackground=Battle.bg)
+            currentBet.grid(row=6, column=0, sticky = NSEW)
+
+            totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
+            totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
+
+            
             
             Battle.going = True
             
             i = 0
 
-            widgets = [superBetUp, betUp, betDown, superBetDown, text, battleButton, oppCard, playerCard]
+            Battle.persistWidgets = [superBetDown, betDown, betUp, superBetUp, text, battleButton, pool, leave, totalMoney, currentBet]
 
-            for item in widgets:
-                Battle.widgets.append(item)
+
             
         elif (Battle.going == True):
-
-            img = PhotoImage(file = "Pictures/superBetUp.gif")
-            superBetUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, activebackground=Battle.bg,\
-                                command = lambda:self.bet("supUp", Battle.money, Battle.currentBet))
-            superBetUp.image = img
-            superBetUp.grid(row=4, column=0, sticky = NSEW)
-
-            img = PhotoImage(file = "Pictures/betUp.gif")
-            betUp = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg,\
-                           command = lambda:self.bet("up", Battle.money, Battle.currentBet))
-            betUp.image = img
-            betUp.grid(row=5, column=0, sticky = NSEW)
-
-            img = PhotoImage(file = "Pictures/betDown.gif")
-            betDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg,\
-                             command = lambda:self.bet("down", Battle.money, Battle.currentBet))
-            betDown.image = img
-            betDown.grid(row=7, column=0, sticky = NSEW)
-
-            img = PhotoImage(file = "Pictures/superBetDown.gif")
-            superBetDown = Button(self.master, bg = Battle.bg, image = img, borderwidth=0, highlightthickness=0, activebackground=Battle.bg,\
-                                  command = lambda:self.bet("supDown", Battle.money, Battle.currentBet))
-            superBetDown.image = img
-            superBetDown.grid(row=8, column=0, sticky = NSEW)
-
-            text = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-            text.grid(row=9, column=0, sticky = NSEW, rowspan = 4)
+        
 
             img = PhotoImage(file = Battle.opponent[0].image)
             oppCard = Label(self.master, bg = Battle.bg, image = img, borderwidth=0)
@@ -355,7 +346,7 @@ class Battle(Frame):
             playerCard.image = img
             playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 100, ipady = 20)
 
-            widgets = [superBetUp, betUp, betDown, superBetDown, text, oppCard, playerCard]
+            widgets = [oppCard, playerCard]
 
             for item in widgets:
                 Battle.widgets.append(item)
@@ -364,49 +355,34 @@ class Battle(Frame):
         else:
             i = 0
         
-        totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-        totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
-
-        currentBet = Label(self.master, bg = Battle.bg,font=("Arial", 20), text = "+" + str(Battle.currentBet), activebackground=Battle.bg)
-        currentBet.grid(row=6, column=0, sticky = NSEW)
-
-        battleButton = Label(self.master, bg = Battle.bg, text = " ", font = ("Arial", 20), pady = 10, borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-        battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
-
+        
         img = PhotoImage(file = Card.cardBack)
         oppDeck = Label(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, font=("Arial", 50), text = (len(Battle.opponent) + len(Battle.oppQ)-i),activebackground=Battle.bg)
         oppDeck.image = img
         oppDeck.grid(row=0, column=3, sticky=N+S+E+W, rowspan = 6, ipadx = 20, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0,\
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, activeforeground = textcolor, font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0,\
                             highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
 
-        pool = Label(self.master, bg = Battle.bg, text = "\t\t\t\t")
-        pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
-
-        leave = Button(self.master, bg = Battle.bg, text = "Quit", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.changeScreen("mainScreen"))
-        leave.grid(row = 12, column = 4, sticky = NSEW, columnspan = 2, ipadx = 64)
-
         
+        widgets = [oppDeck, playerDeck]
 
-        widgets = [totalMoney, currentBet, battleButton, oppDeck, playerDeck, pool, leave]
 
         for item in widgets:
             Battle.widgets.append(item)
 
-
         if(Battle.going == False):
+            while len(Battle.persistWidgets) > 0:
+                Battle.persistwidgets[0].destroy()
+                del Battle.persistwidgets[0]
             self.changeScreen("endGameScreen")
-            
-        if (update == "update"):
-            self.changeScreen("gameScreen")
 
     def battleScreen(self, myMega, clicks):
 
-        if(Card.cardBack == "blackcard.gif"):
+        if(Card.cardBack == "Pictures/blackcard.gif"):
             textcolor = "white"
         else:
             textcolor = "black"
@@ -415,7 +391,7 @@ class Battle(Frame):
         image = Card.cardBack.split(".")
         image = image[0] + "_." + image[1]    
         img = PhotoImage(file = image)
-        pool = Label(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 20), text = len(Battle.megabattle), activebackground=Battle.bg)
+        pool = Label(self.master, bg = Battle.bg, image = img, compound = "center", font=("Arial", 20), fg = textcolor, text = len(Battle.megabattle), activebackground=Battle.bg)
         pool.image = img
         pool.grid(row=0, column=1, sticky=N+S+E+W, rowspan = 13)
 
@@ -426,17 +402,15 @@ class Battle(Frame):
         playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 100, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megabattle2(myMega, clicks))
+        playerDeck = Button(self.master, bg = Battle.bg, image = img, activeforeground = textcolor, compound = "center", fg = textcolor, font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megabattle2(myMega, clicks))
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 20, ipady = 20)
 
         battleButton = Label(self.master, bg = Battle.bg, text = " ", font = ("Arial", 20), borderwidth=0, pady = 10, highlightthickness=0, activebackground=Battle.bg)
         battleButton.grid(row=6, column = 2, sticky = NSEW, columnspan = 2)
         
-        totalMoney = Label(self.master, bg = Battle.bg, text = "Money:\n" + str(Battle.money), font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
-        totalMoney.grid(row=0, column=0, sticky = NSEW, rowspan = 4)
 
-        widgets = [pool, oppCard, playerCard, playerDeck, battleButton, totalMoney]
+        widgets = [pool, oppCard, playerCard, playerDeck, battleButton]
 
         for item in widgets:
             Battle.widgets.append(item)
@@ -516,35 +490,40 @@ class Battle(Frame):
         space3.grid(row=0, column = 4, sticky=NSEW, rowspan = 10, ipadx = 1)
         
 
-        grey = Button(self.master, bg = "slategrey", text = "Grey", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50,\
+        grey = Button(self.master, bg = "slategrey", text = "Grey", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50, pady = 5,\
                          command = lambda:self.purchase("bg", "slategrey"))
         
 
-        brown = Button(self.master, bg = "sienna4", text = "Brown", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50,\
+        brown = Button(self.master, bg = "sienna4", text = "Brown", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50, pady = 5,\
                          command = lambda:self.purchase("bg", "sienna4"))
 
 
-        blue = Button(self.master, bg = "dodgerblue4", text = "Blue", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50,\
+        blue = Button(self.master, bg = "dodgerblue4", text = "Blue", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50, pady = 5,\
                          command = lambda:self.purchase("bg", "dodgerblue4"))
                 
 
-        red = Button(self.master, bg = "red4", text = "Red", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50,\
+        red = Button(self.master, bg = "red4", text = "Red", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50, pady = 5,\
                          command = lambda:self.purchase("bg", "red4"))
         
 
-        purple = Button(self.master, bg = "purple4", text = "Purple", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50,\
+        purple = Button(self.master, bg = "purple4", text = "Purple", font=("Arial", 20), borderwidth=0, highlightthickness=0, fg="black", padx = 50, pady = 5,\
                          command = lambda:self.purchase("bg", "purple4"))
 
         #card backs
         img = PhotoImage(file = "Pictures/redcard_.gif")
-        redCard = Button(self.master, image = img, bg = Battle.bg, borderwidth=0, highlightthickness=0, fg="black", padx = 50,\
+        redCard = Button(self.master, image = img, bg = Battle.bg, borderwidth=0, highlightthickness=0, fg="black",\
                          command = lambda:self.purchase("card", "redcard.gif"))
         redCard.image = img
+
+        img = PhotoImage(file = "Pictures/blackcard_.gif")
+        blackCard = Button(self.master, image = img, bg = Battle.bg, borderwidth=0, highlightthickness=0, fg="black",\
+                         command = lambda:self.purchase("card", "blackcard.gif"))
+        blackCard.image = img
         
 
 
         bgs = {"slategrey": grey, "sienna4": brown, "dodgerblue4": blue, "red4": red, "purple4": purple}
-        cbs = {"redcard.gif": redCard}
+        cbs = {"redcard.gif": redCard, "blackcard.gif": blackCard}
 
         
         b = 1
@@ -555,7 +534,7 @@ class Battle(Frame):
                 b += 1
         for item in cbs:
             if item not in Battle.unlocks:
-                cbs[item].grid(row = c, column = 3, sticky = NSEW, rowspan = 2)
+                cbs[item].grid(row = c, column = 3, sticky = NSEW, rowspan = 2, ipadx = 50, ipady = 5)
                 c += 2
 
         rs_1 = 7 - b
@@ -569,7 +548,7 @@ class Battle(Frame):
         leave = Button(self.master, text = "Main Screen", borderwidth=0, highlightthickness=0, bg = Battle.bg, padx = 50, command = lambda:self.changeScreen("mainScreen"))
         leave.grid(row=1, column=5, sticky=NSEW, ipadx = 20, ipady = 20)
 
-        Battle.widgets = [grey, brown, blue, red, purple, redCard, leave, money, textB, textC, space1, space2, space3, empty1, empty2]
+        Battle.widgets = [grey, brown, blue, red, purple, redCard, leave, money, textB, textC, space1, space2, space3, empty1, empty2, blackCard]
                 
     def purchase(self, item, value):
         if (item == "card"):
@@ -609,44 +588,69 @@ class Battle(Frame):
     def optionsScreen(self):
         #backgrounds
                 
-        grey = Button(self.master, bg = Battle.bg, text = "Grey", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        grey = Button(self.master, bg = "slategrey", text = "Grey", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("bg", "slategrey", "options"))
         
 
-        brown = Button(self.master, bg = Battle.bg, text = "Brown", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        brown = Button(self.master, bg = "sienna4", text = "Brown", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("bg", "sienna4", "options"))
 
 
-        blue = Button(self.master, bg = Battle.bg, text = "Blue", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        blue = Button(self.master, bg = "dodgerblue4", text = "Blue", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("bg", "dodgerblue4", "options"))
         
 
-        green = Button(self.master, bg = Battle.bg, text = "Green", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        green = Button(self.master, bg = "darkolivegreen", text = "Green", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("bg", "darkolivegreen", "options"))
         
 
-        red = Button(self.master, bg = Battle.bg, text = "Red", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        red = Button(self.master, bg = "red4", text = "Red", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("bg", "red4", "options"))
         
 
-        purple = Button(self.master, bg = Battle.bg, text = "Purple", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        purple = Button(self.master, bg = "purple4", text = "Purple", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("bg", "purple4", "options"))
 
         #card backs
-        redCard = Button(self.master, bg = Battle.bg, text = "Red Card", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        img = PhotoImage(file = "Pictures/redcard_.gif")
+        redCard = Button(self.master, bg = Battle.bg, image = img, text = "Red Card", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("card", "redcard.gif", "options"))
-        
-        blueCard = Button(self.master, bg = Battle.bg, text = "Blue Card", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+        redCard.image = img
+
+        img = PhotoImage(file = "Pictures/bluecard_.gif")
+        blueCard = Button(self.master, image = img, bg = Battle.bg, text = "Blue Card", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.select("card", "bluecard.gif", "options"))
+        blueCard.image = img
+
+
+        img = PhotoImage(file = "Pictures/blackcard_.gif")
+        blackCard = Button(self.master, image = img, bg = Battle.bg, borderwidth=0, highlightthickness=0, fg="black",\
+                         command = lambda:self.select("card", "blackcard.gif", "options"))
+        blackCard.image = img
+
+
+        space1 = Label(self.master, justify = "center", text = "", borderwidth=0, highlightthickness=0, background = "black")
+        space1.grid(row=0, column = 0, sticky=NSEW, rowspan = 10, ipadx = 1)
+
+        space2 = Label(self.master, justify = "center", text = "", borderwidth=0, highlightthickness=0, background = "black")
+        space2.grid(row=0, column = 2, sticky=NSEW, rowspan = 10, ipadx = 1)
+
+        space3 = Label(self.master, justify = "center", text = "", borderwidth=0, highlightthickness=0, background = "black")
+        space3.grid(row=0, column = 4, sticky=NSEW, rowspan = 10, ipadx = 1)
+
+        textB = Label(self.master, justify = "center", text = "Backgrounds", font=("Arial", 20), borderwidth=0, highlightthickness=0, background = Battle.bg)
+        textB.grid(row=0, column = 1, sticky=NSEW, rowspan = 1, ipady = 10, ipadx = 20)
+
+        textC = Label(self.master, justify = "center", text = "Decks", font=("Arial", 20), borderwidth=0, highlightthickness=0, background = Battle.bg)
+        textC.grid(row=0, column = 3, sticky=NSEW, rowspan = 1, ipady = 10, ipadx = 20)
 
 
         bgs = {"slategrey": grey, "sienna4": brown, "dodgerblue4": blue, "darkolivegreen": green, "red4": red, "purple4": purple}
-        cbs = {"bluecard.gif": blueCard, "redcard.gif": redCard}
-
+        cbs = {"bluecard.gif": blueCard, "redcard.gif": redCard, "blackcard.gif": blackCard}
 
 
         money = Label(self.master, justify = "center", text = "Coins:\n" + str(Battle.ownedMoney), font=("Arial", 20), borderwidth=0, highlightthickness=0, background = Battle.bg)
-        money.grid(row=0, column = 2, sticky=NSEW, rowspan = 1, ipady = 10, ipadx = 20)
+        money.grid(row=0, column = 5, sticky=NSEW, ipady = 10, ipadx = 20)
 
         b = 1
         c = 1
@@ -656,14 +660,14 @@ class Battle(Frame):
                 bgs[item].grid(row = b, column = 1, sticky = NSEW)
                 b += 1
             if item in cbs:
-                cbs[item].grid(row = c, column = 2, sticky = NSEW)
-                c += 1
+                cbs[item].grid(row = c, column = 3, rowspan = 2, sticky = NSEW, ipadx = 50, ipady = 5)
+                c += 2
 
 
-        leave = Button(self.master, text = "Quit", borderwidth=0, highlightthickness=0, padx = 50, command = lambda:self.changeScreen("mainScreen"))
-        leave.grid(row=10, column=1, sticky=NSEW, rowspan = 1, columnspan = 2, ipadx = 20, ipady = 20)
+        leave = Button(self.master, text = "Main Screen", borderwidth=0, bg = Battle.bg, highlightthickness=0, padx = 50, command = lambda:self.changeScreen("mainScreen"))
+        leave.grid(row=c, column=5, sticky=NSEW, rowspan = 1, columnspan = 2, ipady = 20)
 
-        Battle.widgets = [grey, blue, green, red, purple, brown, redCard, blueCard, leave, money]
+        Battle.widgets = [grey, blue, green, red, purple, brown, redCard, blueCard, blackCard, leave, money, space1, space2, space3, textB, textC]
         
                         #####################  CODE   #####################
 
