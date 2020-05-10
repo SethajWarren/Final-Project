@@ -148,9 +148,6 @@ class Battle(Frame):
                 print winner
                 print "\t" + str(myCard),
                 print "\t" + str(oppCard)
-                print Battle.wins
-                print Battle.loss
-                print Battle.history
                     
         except:
             Battle.going = False
@@ -298,7 +295,6 @@ class Battle(Frame):
                         ##################### SCREENS #####################
         
     def gameScreen(self, update = "", winner = ""):
-        print Battle.widgets
         if (update == "update"):
             while (len(Battle.widgets) > 0):
                 Battle.widgets[0].destroy()
