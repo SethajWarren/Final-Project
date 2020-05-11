@@ -1,2 +1,2 @@
-darkolivegreen 500 Pictures/bluecard.gif
-darkolivegreen bluecard.gif
+darkolivegreen 5910 Pictures/bluecard.gif
+darkolivegreen bluecard.gif 
