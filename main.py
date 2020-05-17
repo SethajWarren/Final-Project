@@ -414,7 +414,6 @@ class Battle(Frame):
         playerCard = Label(self.master, bg = Battle.bg, text = "", borderwidth=0, highlightthickness=0, activebackground=Battle.bg)
         playerCard.grid(row=7, column=2, sticky=NSEW, rowspan = 6, ipadx = 20, ipady = 20)
 
-        # might need a pressed boolean so the initial gamescreen does not show the first battle's cards
         img = PhotoImage(file = Card.cardBack)
         playerDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)),borderwidth=0, highlightthickness=0, activebackground=Battle.bg, command = lambda: self.megabattle2(myMega, clicks))
         playerDeck.image = img
@@ -511,10 +510,17 @@ class Battle(Frame):
         redCard = Button(self.master, bg = Battle.bg, text = "Red Card", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
                          command = lambda:self.purchase("card", "redcard.gif"))
 
+        # might change to 'redBicycleVintage'
+        redVintage = Button(self.master, bg = Battle.bg, text = "Red Bicycle Vintage", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+                         command = lambda:self.purchase("card", "redBicycleVintage.gif"))
+
+        darkMansionTarot = Button(self.master, bg = Battle.bg, text = "Dark Mansion Tarot", font=("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, fg="black", padx = 50,\
+                         command = lambda:self.purchase("card", "DarkMansionTarot.gif"))
+
 
 
         bgs = {"grey": grey,"brown": brown, "blue": blue, "red": red, "purple": purple}
-        cbs = {"redcard.gif": redCard}
+        cbs = {"redcard.gif": redCard, "redBicycleVintage.gif":redVintage, "DarkMansionTarot.gif":darkMansionTarot}
         
         b = 0
         c = 0
