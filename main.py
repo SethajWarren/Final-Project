@@ -541,7 +541,7 @@ class Battle(Frame):
         currentBet = Label(self.master, bg = Battle.bg,font=("Arial", 20), text = "+" + str(Battle.currentBet), activebackground=Battle.bg)
         # creates a label that shows shows the opponent's deck and the number of cards it has
         currentBet.grid(row=6, column=0, sticky = NSEW)
-<<<<<<< HEAD
+
 
 
         battleButton = Label(self.master, bg = Battle.bg, text = " ", font = ("Arial", 20), borderwidth=0, highlightthickness=0, activebackground=Battle.bg, padx = 50)
@@ -554,6 +554,12 @@ class Battle(Frame):
                             highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
         playerDeck.image = img
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 28, ipady = 20)
+
+        img = PhotoImage(file = Card.cardBack)
+        oppDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, activeforeground = textcolor, font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0,\
+                            highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
+        oppDeck.image = img
+        oppDeck.grid(row=0, column=3, rowspan = 6, sticky = NSEW, ipadx = 28, ipady = 20)
 
         # creates a label that displays the stats from the game being played
         stats = Label(self.master, bg = Battle.bg, text = "Wins: " + str(Battle.wins) + "\n\n Losses: " + str(Battle.loss) + "\n\nBattles: {}".format(Battle.ties) + "\n\nW/L: " + str(self.stats(Battle.wins, Battle.loss)), \
