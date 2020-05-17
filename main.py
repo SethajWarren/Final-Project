@@ -556,7 +556,7 @@ class Battle(Frame):
         playerDeck.grid(row=7, column=3, rowspan = 6, sticky = NSEW, ipadx = 28, ipady = 20)
 
         img = PhotoImage(file = Card.cardBack)
-        oppDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, activeforeground = textcolor, font=("Arial", 50), text = (len(Battle.me) + len(Battle.meQ)-i),borderwidth=0,\
+        oppDeck = Button(self.master, bg = Battle.bg, image = img, compound = "center", fg = textcolor, activeforeground = textcolor, font=("Arial", 50), text = (len(Battle.opponent) + len(Battle.oppQ)-i),borderwidth=0,\
                             highlightthickness=0, activebackground=Battle.bg, command = lambda: self.battle())
         oppDeck.image = img
         oppDeck.grid(row=0, column=3, rowspan = 6, sticky = NSEW, ipadx = 28, ipady = 20)
