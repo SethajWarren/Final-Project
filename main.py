@@ -38,7 +38,7 @@ class Battle(Frame):
         Battle.money = 10
         Battle.widgets = []
         
-        
+        #creates all the cards
         s2 = Card("Spades", 2, "s2.gif")
         c2 = Card("Clubs", 2, "c2.gif")
         d2 = Card("Diamonds", 2,"d2.gif")
@@ -109,6 +109,7 @@ class Battle(Frame):
         Battle.wins = 0
         Battle.loss = 0
         Battle.currentBet = 0
+        
                         #####################  GAME LOGIC #####################
 
     # a battle function that will be called when two cards battle   
@@ -659,6 +660,11 @@ class Battle(Frame):
         Battle.widgets = [leftSpace, topSpace, midSpace, botSpace, rightSpace, play, options, store, leave, money, title]
         Battle.persistWidgets = []
 
+
+##################################################################################################
+#############################################  STORE  ############################################
+##################################################################################################
+
     # this funciton is called whenever the player goes to the store screen       
     def storeScreen(self):
 
@@ -847,100 +853,11 @@ class Battle(Frame):
 
         blackCard.bind("<Enter>", lambda event:self.on_enter_card(event, "Pictures/blackcard.gif"))
         blackCard.bind("<Leave>", self.on_leave_card)
-        
-
-    # a function that is called when the mouse enters a button that is used to purchase customizations
-    def on_enter_color(self, event, color):
-        
-        # changes the backgrounds of the preview area to the customization the mouse is on
-        for i in range(6):
-            Battle.widgets[i].configure(bg = color)
-        
-    # a function that is used when the mouse leaves a button that is used to purchase customizations
-    def on_leave_color(self, enter):
-        
-        # changes the backgrounds of the preview area to the customization that is selected in options
-        for i in range(6):
-            Battle.widgets[i].configure(bg = Battle.bg)
 
 
-    def on_enter_card(self, event, cardBack):
-        
-        # changes the backgrounds of the preview area to the customization the mouse is on
-        img = PhotoImage(file = cardBack)
-        Battle.widgets[0].configure(image = img)
-        Battle.widgets[0].image = img
-
-        image = cardBack.split(".")
-        image = image[0] + "_." + image[1]    
-        img = PhotoImage(file = image)
-        Battle.widgets[1].configure(image = img)
-        Battle.widgets[1].image = img
-        
-        
-    def on_leave_card(self, enter):
-        
-        # changes the backgrounds of the preview area to the customization that is selected in options
-        img = PhotoImage(file = Card.cardBack)
-        Battle.widgets[0].configure(image = img)
-        Battle.widgets[0].image = img
-
-        image = Card.cardBack.split(".")
-        image = image[0] + "_." + image[1]    
-        img = PhotoImage(file = image)
-        Battle.widgets[1].configure(image = img)
-        Battle.widgets[1].image = img
-
-    # a function that is used when purchasing an item
-    def purchase(self, item, value):
-
-        # checks if the item purchased is a card and if so charges 5000
-        if (item == "card"):
-            price = 10000
-                
-        # checks if the item purchased is a background and if so charges 1500
-        if (item == "bg"):
-            price = 5000
-
-        # if the player has enough money to purchase it
-        if(Battle.ownedMoney >= price):
-            # creates a popup window to allow the player to confirm if the player would like to purchase the item
-            purchase = mb.askyesno(title = "Purchase Item", message = "Would you like to purchase this item?")
-            # if so it deducts the price of the item and unlocks the item
-            if (purchase):
-                Battle.ownedMoney -= price
-                Battle.unlocks.append(value)
-                self.select(item, value, "store")
-                mb.showinfo("Purchase Item", "Item Purchased!")
-
-        # if the player does not have enough money    
-        else:
-            # shows a popup explaining they do not have enough money
-            mb.showinfo("Purchase Item", "Sorry! You don't have enough money")
-            
-            
-    def changeScreen(self, newScreen):
-        while (len(Battle.persistWidgets) > 0):
-            Battle.persistWidgets[0].destroy()
-            del Battle.persistWidgets[0]
-
-        
-        while (len(Battle.widgets) > 0):
-            Battle.widgets[0].destroy()
-            del Battle.widgets[0]
-        
-            
-        if (newScreen == "mainScreen"):
-            self.mainScreen()
-        if (newScreen == "gameScreen"):
-            self.gameScreen()
-        if (newScreen == "optionsScreen"):
-            self.optionsScreen()
-        if (newScreen == "storeScreen"):
-            self.storeScreen()
-        if (newScreen == "endGameScreen"):
-            self.endGameScreen()
-            
+##################################################################################################
+############################################# OPTIONS ############################################
+##################################################################################################
 
     def optionsScreen(self):
         #backgrounds
@@ -1120,9 +1037,110 @@ class Battle(Frame):
 
         blackCard.bind("<Enter>", lambda event:self.on_enter_card(event, "Pictures/blackcard.gif"))
         blackCard.bind("<Leave>", self.on_leave_card)
-        
-                        #####################  CODE   #####################
 
+        
+#################################################################################################
+########################################### OTHER CODE ##########################################
+#################################################################################################
+
+        
+    # a function that is called when the mouse enters a button that is used to purchase customizations
+    def on_enter_color(self, event, color):
+        
+        # changes the backgrounds of the preview area to the customization the mouse is on
+        for i in range(6):
+            Battle.widgets[i].configure(bg = color)
+        
+    # a function that is used when the mouse leaves a button that is used to purchase customizations
+    def on_leave_color(self, enter):
+        
+        # changes the backgrounds of the preview area to the customization that is selected in options
+        for i in range(6):
+            Battle.widgets[i].configure(bg = Battle.bg)
+
+
+    def on_enter_card(self, event, cardBack):
+        # changes the cards of the preview area to the customization the mouse is on
+        img = PhotoImage(file = cardBack)
+        Battle.widgets[0].configure(image = img)
+        Battle.widgets[0].image = img
+
+        image = cardBack.split(".")
+        image = image[0] + "_." + image[1]    
+        img = PhotoImage(file = image)
+        Battle.widgets[1].configure(image = img)
+        Battle.widgets[1].image = img
+               
+    def on_leave_card(self, enter):
+        # changes the cards of the preview area to the customization that is selected in options
+        img = PhotoImage(file = Card.cardBack)
+        Battle.widgets[0].configure(image = img)
+        Battle.widgets[0].image = img
+
+        image = Card.cardBack.split(".")
+        image = image[0] + "_." + image[1]    
+        img = PhotoImage(file = image)
+        Battle.widgets[1].configure(image = img)
+        Battle.widgets[1].image = img
+
+
+    # a function that is used when purchasing an item
+    def purchase(self, item, value):
+
+        # checks if the item purchased is a card and if so charges 5000
+        if (item == "card"):
+            price = 10000
+                
+        # checks if the item purchased is a background and if so charges 1500
+        if (item == "bg"):
+            price = 5000
+
+        # if the player has enough money to purchase it
+        if(Battle.ownedMoney >= price):
+            # creates a popup window to allow the player to confirm if the player would like to purchase the item
+            purchase = mb.askyesno(title = "Purchase Item", message = "Would you like to purchase this item?")
+            # if so it deducts the price of the item and unlocks the item
+            if (purchase):
+                Battle.ownedMoney -= price
+                Battle.unlocks.append(value)
+                self.select(item, value, "store")
+                mb.showinfo("Purchase Item", "Item Purchased!")
+
+        # if the player does not have enough money    
+        else:
+            # shows a popup explaining they do not have enough money
+            mb.showinfo("Purchase Item", "Sorry! You don't have enough money")
+            
+
+    #function that removes all widgets from the previous screen
+    #this is done to reduce the number of widgets loaded at any given time and to fix the persistant sizing of widgets
+    def changeScreen(self, newScreen):
+
+        #removes all widgets that are never updated from the previous screen
+        while (len(Battle.persistWidgets) > 0):
+            Battle.persistWidgets[0].destroy()
+            del Battle.persistWidgets[0]
+
+        #removes the widgets that are updated throughout the use of the previous screen
+        while (len(Battle.widgets) > 0):
+            Battle.widgets[0].destroy()
+            del Battle.widgets[0]
+
+
+        #creates the new screen         
+        if (newScreen == "mainScreen"):
+            self.mainScreen()
+        if (newScreen == "gameScreen"):
+            self.gameScreen()
+        if (newScreen == "optionsScreen"):
+            self.optionsScreen()
+        if (newScreen == "storeScreen"):
+            self.storeScreen()
+        if (newScreen == "endGameScreen"):
+            self.endGameScreen()
+
+
+    #used in the options and purchase screen to set the new card / background and saves it. updates the screen
     def select(self, item, value, update):
         if item == "bg":
             Battle.bg = value
@@ -1136,6 +1154,7 @@ class Battle(Frame):
         if (update == "store"):
             self.changeScreen("storeScreen")
 
+    #calculates the win / loss ratio after each round
     def stats(self, wins, loss):
         if (loss == 0):
             winLoss = wins / 1.0
@@ -1147,15 +1166,21 @@ class Battle(Frame):
         
 
     
-#########################################################
+######################## MAIN CODE ############################
+#window size
 WIDTH = 1072
 HEIGHT = 712
+
+#initialize
 window = Tk()
 window.geometry("{}x{}".format(WIDTH, HEIGHT))
-window.title("War")
+window.title("War!")
 g = Battle(window)
+
+#starts on main screen
 g.mainScreen()
 window.mainloop()
+
 
 ### NOTES ###
 
