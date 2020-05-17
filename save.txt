@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 sienna4 13894300 Pictures/DarkMansionTarot.gif
 green bluecard.gif sienna4 sienna4 slategrey redcard.gif redBicycleVintage.gif DarkMansionTarot.gif 
+=======
+darkolivegreen 26110 Pictures/bluecard.gif
+darkolivegreen bluecard.gif 
+>>>>>>> 971f661c27df7e99b315c2f8a0d458968ca0b664
