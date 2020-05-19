@@ -408,7 +408,7 @@ class Battle(Frame):
         img = PhotoImage(file = "Pictures/button.gif")
         leave = Button(self.master, text = "Quit", compound = "center", fg = "white", image = img, borderwidth=0, activebackground=Battle.bg, highlightthickness=0, font=("Arial", 30), background = Battle.bg, command = lambda:self.changeScreen("mainScreen"))
         leave.image = img
-        leave.grid(row=2, column=0, sticky=NSEW, ipady = leavePad, ipadx = 446)
+        leave.grid(row=7, column=0, sticky=NSEW, ipady = leavePad, ipadx = 446)
 
         # creates a list named widgets that include the GUI elements of the current screen
         Battle.widgets = [gameover, leave, stats]
@@ -1079,7 +1079,7 @@ class Battle(Frame):
         empty4.grid(row= 10, column = 7, sticky=NSEW, columnspan = 2, rowspan = 4)
         
 
-        Battle.widgets = [previewCard, previewCard_, superBetUp, superBetDown, empty4, previewtextText, previewText, grey, blue, green, red, purple, brown, redCard, blueCard, blackCard, leave, money, space1, space2, space3, space4, space5, space6, textB, textC, empty1, empty2, empty3, play, store]
+        Battle.widgets = [previewCard, previewCard_, superBetUp, superBetDown, empty4, previewtextText, previewText, grey, blue, green, red, purple, brown, redCard, blueCard, blackCard, darkmansionCard, leave, money, space1, space2, space3, space4, space5, space6, textB, textC, empty1, empty2, empty3, play, store]
 
         green.bind("<Enter>", lambda event:self.on_enter_color(event, "darkolivegreen"))
         green.bind("<Leave>", self.on_leave_color)
