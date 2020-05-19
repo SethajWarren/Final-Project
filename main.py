@@ -820,9 +820,10 @@ class Battle(Frame):
         # likewise with the cards and the images
         cbs = {"redcard.gif": redCard, "blackcard.gif": blackCard}
 
-        # yeah Carter is gonna have to comment this bit cause I have no clue
+        # initial rows for items
         b = 2
         c = 2
+
         for item in bgs:
             if item not in Battle.unlocks:
                 bgs[item].grid(row = b, column = 1, sticky = NSEW)

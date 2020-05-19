@@ -1,2 +1,2 @@
-slategrey 4820 Pictures/blackcard.gif
-darkolivegreen bluecard.gif blackcard.gif slategrey redcard.gif 
+darkolivegreen 0 Pictures/bluecard.gif
+darkolivegreen bluecard.gif
